@@ -4,7 +4,7 @@ Adding Spice AI to your [Kubernetes](https://kubernetes.io/) cluster is easy.
 
 ## Prerequisites
 
-This example assumes you have a working Kubernetes cluster set up and can access it via `kubectl`.  For help setting up a cluster, consult the [Kubernetes Documentation](https://kubernetes.io/docs/setup/). 
+This example assumes you have a working Kubernetes cluster set up and can access it via `kubectl`.  For help setting up a cluster, consult the [Kubernetes Documentation](https://kubernetes.io/docs/setup/).
 
 Ensure this `samples` repository is cloned and you are in the `kubernetes` directory.
 
@@ -45,3 +45,42 @@ kubectl run -i --tty --rm debug --image=alpine --restart=Never -- sh
 ```
 
 Cool!  If you would like to access Spice AI from outside the cluster, try changing the `type` of the Service in `spiceai-service.yaml` to either a `NodePort` or a `LoadBalancer`, depending on how your cluster is set up.
+
+## Sidecar
+
+If you would like to run Spice AI as a sidecar, you can easily add it to your existing application.  Simply modify your existing Deployment to include the Spice AI runtime.  The following is an example you can use from [spiceai-deployment.yaml](spiceai-deployment.yaml) in this sample:
+
+```yaml
+spec:
+      <your application specific details here>
+      
+      containers:
+      - name: spiceai
+        image: ghcr.io/spiceai/spiced:latest
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: spice
+          mountPath: /userapp/.spice
+      initContainers:
+      - name: spiceai-init
+        image: busybox
+        command: ['/bin/sh', '-c', 'mkdir -p /spice/pods && cp /cartpole/cartpole-v1.yaml /spice/pods/cartpole-v1.yaml']
+        volumeMounts:
+        - name: spice
+          mountPath: /spice
+        - name: cartpole-volume
+          mountPath: /cartpole
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      volumes:
+        - name: cartpole-volume
+          configMap:
+            name: cartpole
+        - name: spice
+          emptyDir: {}
+```
+
+Once you've added this, Spice AI will be reachable from your application at `http://localhost:8000`!
