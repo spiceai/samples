@@ -84,3 +84,7 @@ spec:
 ```
 
 Once you've added this, Spice AI will be reachable from your application at `http://localhost:8000`!
+
+## Coming Soon
+
+We are working to build a set of [Kubernetes Operators](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) to make your Spice AI integration even easier.  Stay tuned! 
