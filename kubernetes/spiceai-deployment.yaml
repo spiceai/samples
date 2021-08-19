@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spiceai-deployment
+  labels:
+    app: spiceai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spiceai
+  template:
+    metadata:
+      labels:
+        app: spiceai
+    spec:
+      containers:
+      - name: spiceai
+        image: ghcr.io/spiceai/spiced:latest
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: spice
+          mountPath: /userapp/.spice
+      initContainers:
+      - name: spiceai-init
+        image: busybox
+        command: ['/bin/sh', '-c', 'mkdir -p /spice/pods && cp /cartpole/cartpole-v1.yaml /spice/pods/cartpole-v1.yaml']
+        volumeMounts:
+        - name: spice
+          mountPath: /spice
+        - name: cartpole-volume
+          mountPath: /cartpole
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      volumes:
+        - name: cartpole-volume
+          configMap:
+            name: cartpole
+        - name: spice
+          emptyDir: {}
+
