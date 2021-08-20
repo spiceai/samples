@@ -1,0 +1,41 @@
+name: log-pruner
+params:
+  period: 24h
+  interval: 10m
+  granularity: 30s
+datasources:
+- from: hostmetrics
+  name: cpu
+  data:
+    connector:
+      name: influxdb
+      params:
+        url: SPICE_INFLUXDB_URL
+        token: SPICE_INFLUXDB_TOKEN
+        org: SPICE_INFLUXDB_ORG
+        bucket: SPICE_INFLUXDB_BUCKET
+        measurement: cpu
+        field: usage_idle
+    processor:
+      name: flux-csv
+  fields:
+      # "usage_idle" measures the percentage of time the CPU is idle
+      # Higher values indicate less load
+      - name: usage_idle
+
+actions:
+  - name: prune_logs
+  - name: do_not_prune_logs
+
+training:
+  rewards:
+    # Reward pruning logs at a time when load is anticipated to be low
+    # The lower the load, the higher the reward
+    # Punish pruning logs harshly at a time when load is high (idle < 90%)
+    - reward: prune_logs
+      with: reward = new_state.hostmetrics_cpu_usage_idle * 100 if new_state.hostmetrics_cpu_usage_idle > 0.90 else -1000
+
+    # Reward not pruning logs under load
+    # Punish not pruning logs slightly when load is low (idle > 90%)
+    - reward: do_not_prune_logs
+      with: reward = 100 if new_state.hostmetrics_cpu_usage_idle < 0.90 else -10
