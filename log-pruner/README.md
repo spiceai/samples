@@ -57,7 +57,7 @@ datasources:
 <snip>
 ```
 
-A Spice AI Datasource has two components, a Connector and a Processor.  A Connector fetches data from a specific source, like a database or a file.  A Processor takes the data that the Connector has fetched and transforms it into a format Spice AI can use.  In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor.  We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU is spent in an idle state.
+A Spice AI Datasource has two components, a Connector and a Processor.  A Connector fetches data from a specific source, like a database or a file.  A Processor takes the data that the Connector has fetched and transforms it into a format Spice AI can use.  In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor.  We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
 
 In the `params` section of the InfluxDB Connector, notice we are using environment variables prefixed with `SPICE_` to pass configuration.  Any environment variable with this prefix will automatically be replaced with its value by the Spice AI runtime.
 
@@ -71,7 +71,7 @@ actions:
   - name: do_not_prune_logs
 ```
 
-Notice that we have two Actions defined, `prune_logs` and `do_not_prune_logs`.  As it learns and then later makes recommendations, Spice AI will consider these only these two options.
+Notice that we have two Actions defined, `prune_logs` and `do_not_prune_logs`.  As it learns and then later makes recommendations, Spice AI will consider only these two options.
 
 ## Reward the Actions
 
@@ -112,7 +112,7 @@ Now, start the Spice AI runtime:
 spice run
 ```
 
-Once the Spice runtime has loaded, add the LogPruner example using another terminal.
+Once the Spice runtime has loaded, add the LogPruner Pod using another terminal.
 
 ```bash
 cd samples
