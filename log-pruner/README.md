@@ -20,7 +20,7 @@ First, ensure this `samples` repository is cloned.
 git clone https://github.com/spiceai/samples.git
 ```
 
-Move to the `log-pruner` directory and start the Telegfraf and InfluxDB containers to start collecting and storing metrics.
+Move to the `log-pruner` directory and start the Telegraf and InfluxDB containers to start collecting and storing metrics.
 
 ```bash
 cd samples
