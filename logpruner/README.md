@@ -20,15 +20,15 @@ First, ensure this `samples` repository is cloned.
 git clone https://github.com/spiceai/samples.git
 ```
 
-Move to the `log-pruner` directory and start the Telegraf and InfluxDB containers to start collecting and storing metrics.
+Move to the `logpruner` directory and start the Telegraf and InfluxDB containers to start collecting and storing metrics.
 
 ```bash
 cd samples
-cd log-pruner
+cd logpruner
 docker-compose up
 ```
 
-You will observe Telegraf and InfluxDB start up.  After both containers have started, CPU metrics will begin flowing into InfluxDB.
+You will observe Telegraf and InfluxDB start up. After both containers have started, CPU metrics will begin flowing into InfluxDB.
 
 ## Using Spice AI to train
 
@@ -38,7 +38,7 @@ Example environment variables that will work with the InfluxDB container have be
 
 ```bash
 cd samples
-cd log-pruner
+cd logpruner
 source set-spice-vars.sh
 ```
 
@@ -52,8 +52,8 @@ Once the Spice AI runtime has loaded, open another terminal, and start training:
 
 ```bash
 cd samples
-cd log-pruner
-spice pod train log-pruner
+cd logpruner
+spice train logpruner
 ```
 
 In the Spice AI runtime terminal, you will observe the runtime load CPU metrics and begin to train!
@@ -63,21 +63,21 @@ In the Spice AI runtime terminal, you will observe the runtime load CPU metrics 
 Once the training has completed, try fetching a recommendation.
 
 ```bash
-curl http://localhost:8000/api/v0.1/pods/log-pruner/inference
+curl http://localhost:8000/api/v0.1/pods/logpruner/inference
 ```
 
 You'll see a result telling you if now is a good time to prune logs or not, along with Spice AI's confidence in that recommendation. Cool!
 
 ```json
 {
-	"response": {
-		"result": "ok"
-	},
-	"start": 1629764010,
-	"end": 1629764610,
-	"action": "prune_logs",
-	"confidence": 0.614,
-	"tag": "latest"
+  "response": {
+    "result": "ok"
+  },
+  "start": 1629764010,
+  "end": 1629764610,
+  "action": "prune_logs",
+  "confidence": 0.614,
+  "tag": "latest"
 }
 ```
 
@@ -85,7 +85,7 @@ You'll see a result telling you if now is a good time to prune logs or not, alon
 
 Spice AI was able to use the Telegraf data stored in InfluxDB along with definitions for possible actions it can recommend to train and provide a recommendation on when to prune logs.
 
-Open the Pod manifest `log-pruner.yml` in the `.spice/pods` directory.
+Open the Pod manifest `logpruner.yml` in the `.spice/pods` directory.
 
 Review the `datasources` section on how the data was connected.
 
@@ -113,7 +113,7 @@ datasources:
 <snip>
 ```
 
-A Spice AI Datasource has two components, a Connector and a Processor.  A Connector fetches data from a specific source, like a database or a file.  A Processor takes the data that the Connector has fetched and transforms it into a format Spice AI can use.  In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor.  We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
+A Spice AI Datasource has two components, a Connector and a Processor. A Connector fetches data from a specific source, like a database or a file. A Processor takes the data that the Connector has fetched and transforms it into a format Spice AI can use. In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor. We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
 
 In the `params` section of the InfluxDB Connector, notice we are using environment variables prefixed with `SPICE_` to pass configuration. Any environment variable with this prefix will automatically be replaced with its value by the Spice AI runtime.
 
@@ -148,7 +148,7 @@ training:
       with: reward = 100 if new_state.hostmetrics_cpu_usage_idle < 0.90 else -10
 ```
 
-Here, we tell Spice AI how we want to reward each action, given the state at that step.  These rewards are defined by simple Python expressions that assign a value to `reward`.  A higher value means Spice AI will learn to take this action more frequently as it trains.  We can use values from our Datasources to calculate these rewards.  They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`.  Here we are using `new_state.hostmetrics_cpu_usage_idle`.
+Here, we tell Spice AI how we want to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice AI will learn to take this action more frequently as it trains. We can use values from our Datasources to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here we are using `new_state.hostmetrics_cpu_usage_idle`.
 
 ## Next steps
 
