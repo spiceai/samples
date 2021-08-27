@@ -1,0 +1,48 @@
+name: gardener
+params:
+  epoch_time: 1612557000
+  granularity: 10m
+  interval: 1h
+  period: 2h
+datasources:
+  - datasource:
+    from: garden
+    name: sensors
+    fields:
+      - name: temperature
+      - name: moisture
+    data:
+      connector:
+        name: file
+        params:
+          path: data/garden_data.csv
+      processor:
+        name: csv
+
+actions:
+  - name: close_valve
+  - name: open_valve_half
+  - name: open_valve_full
+
+training:
+  rewards:
+    - reward: close_valve
+      with: |
+        if new_state.garden_sensors_moisture > 0.25:
+          reward = 20
+        else:
+          reward = -10
+
+    - reward: open_valve_half
+      with: |
+        if new_state.garden_sensors_moisture < 0.25:
+          reward = 10
+        else:
+          reward = -10
+
+    - reward: open_valve_full
+      with: |
+        if new_state.garden_sensors_moisture < 0.25:
+          reward = 10
+        else:
+          reward = -20
