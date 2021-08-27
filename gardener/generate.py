@@ -26,22 +26,25 @@ def maintain_garden_moisture_content(garden):
             )
 
             # Get inference
-            recommended_action = random.randint(0, 6)
-
+            recommended_action = random.randint(0, 4)
             # Update gargen
             if recommended_action == 0:
-                garden.water_full()
-                print("Watering at full flow")
+                if garden.get_moisture() > 0.30:
+                    pass
+                else:
+                    garden.water_full()
+                    print("Watering at full flow")
             elif recommended_action == 1:
                 garden.water_half()
                 print("Watering at half flow")
             else:
-                pass
+                if garden.get_moisture() < 0.15:
+                    garden.water_full()
 
             garden.update()
             time.sleep(0.01)
 
 
 if __name__ == "__main__":
-    garden = Garden(0.25, 25)
+    garden = Garden(0.25, 25, 1612557000)
     maintain_garden_moisture_content(garden)

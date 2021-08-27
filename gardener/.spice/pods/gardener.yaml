@@ -3,7 +3,7 @@ params:
   epoch_time: 1612557000
   granularity: 10m
   interval: 1h
-  period: 2h
+  period: 100d
 datasources:
   - datasource:
     from: garden
@@ -29,7 +29,7 @@ training:
     - reward: close_valve
       with: |
         if new_state.garden_sensors_moisture > 0.25:
-          reward = 20
+          reward = 100
         else:
           reward = -10
 
@@ -38,11 +38,11 @@ training:
         if new_state.garden_sensors_moisture < 0.25:
           reward = 10
         else:
-          reward = -10
+          reward = -25
 
     - reward: open_valve_full
       with: |
         if new_state.garden_sensors_moisture < 0.25:
           reward = 10
         else:
-          reward = -20
+          reward = -50

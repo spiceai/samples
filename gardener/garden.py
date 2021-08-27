@@ -4,7 +4,10 @@ import time
 
 class Garden:
     # Start simulation at 2021-01-01 00:00:00 GMT
-    INITIAL_TIME_UNIX_SECONDS = 1612557000
+    #  INITIAL_TIME_UNIX_SECONDS = 1612557000
+
+    # Start simulation at 2021-01-01 00:00:00 GMT
+    INITIAL_TIME_UNIX_SECONDS = 1613283600
 
     # Each step is 10 minutes (60 seconds * 10)
     STEP_INTERVAL_SECONDS = 600
@@ -12,10 +15,10 @@ class Garden:
     # 86400 seconds per day
     STEPS_PER_DAY = 86400 / STEP_INTERVAL_SECONDS
 
-    def __init__(self, moisture, temperature):
+    def __init__(self, moisture, temperature, initial_time_unix_seconds):
         self.moisture = moisture
         self.temperature = temperature
-        self.time_unix_seconds = Garden.INITIAL_TIME_UNIX_SECONDS
+        self.time_unix_seconds = initial_time_unix_seconds
 
     def get_moisture(self):
         return self.moisture

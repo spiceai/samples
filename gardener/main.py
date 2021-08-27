@@ -11,10 +11,6 @@ SPICE_AI_INFERENCE_URL = "http://localhost:8000/api/v0.1/pods/gardener/inference
 
 
 def maintain_garden_moisture_content(garden):
-    # with open("data/garden_data.csv", "w", newline="") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerow(["time", "temperature", "moisture"])
-
     while True:
         # Observe garden
         print(
@@ -23,11 +19,11 @@ def maintain_garden_moisture_content(garden):
 
         with open("data/garden_data.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            for _ in range(100):
+            for _ in range(10):
                 # Post observation
                 writer.writerow(
                     [
-                        time.time(),
+                        garden.get_time_unix_seconds(),
                         round(garden.get_temperature(), 3),
                         round(garden.get_moisture(), 3),
                     ]
