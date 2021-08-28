@@ -10,9 +10,8 @@ SPICE_AI_INFERENCE_URL = "http://localhost:8000/api/v0.1/pods/gardener/inference
 
 
 def maintain_garden_moisture_content(garden):
-    with open("data/garden_data.csv", "a", newline="") as file:
+    with open(GARDEN_DATA_CSV_PATH, "a", newline="") as file:
         writer = csv.writer(file)
-
         while True:
             # Simulate passage of time and add observations to the data set
             print(
@@ -31,10 +30,11 @@ def maintain_garden_moisture_content(garden):
                 file.flush()
 
             recommended_action = None
+
             try:
-                r = requests.get(SPICE_AI_INFERENCE_URL)
-                response_json = r.json()
-                print
+                # Get a recommendation from Spice AI
+                response = requests.get(SPICE_AI_INFERENCE_URL)
+                response_json = response.json()
                 recommended_action = response_json["action"]
             except Exception:
                 print(
@@ -74,5 +74,5 @@ def create_garden_from_csv(csv_path):
 
 
 if __name__ == "__main__":
-    garden = create_garden_from_csv("data/garden_data.csv")
+    garden = create_garden_from_csv(GARDEN_DATA_CSV_PATH)
     maintain_garden_moisture_content(garden)

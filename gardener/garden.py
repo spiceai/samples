@@ -1,14 +1,7 @@
 import random
-import time
 
 
 class Garden:
-    # Start simulation at 2021-01-01 00:00:00 GMT
-    #  INITIAL_TIME_UNIX_SECONDS = 1612557000
-
-    # Start simulation at 2021-01-01 00:00:00 GMT
-    INITIAL_TIME_UNIX_SECONDS = 1613283600
-
     # Each step is 10 minutes (60 seconds * 10)
     STEP_INTERVAL_SECONDS = 600
 
@@ -42,9 +35,11 @@ class Garden:
         self.moisture += 0.01 * ((100 - self.temperature) / 100)
 
     def update(self):
+        # Dry out by an amount proportional to the temperature
         if self.moisture > 0.01:
             self.moisture -= 0.01 * (self.temperature / 100)
 
+        # Add some "daily" temperature fluctuation
         is_afternoon = (
             (self.time_unix_seconds / Garden.STEP_INTERVAL_SECONDS)
             % Garden.STEPS_PER_DAY
