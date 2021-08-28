@@ -6,8 +6,8 @@ params:
   period: 100d
 datasources:
   - datasource:
-    from: garden
-    name: sensors
+    from: sensors
+    name: garden
     fields:
       - name: temperature
       - name: moisture
@@ -28,21 +28,21 @@ training:
   rewards:
     - reward: close_valve
       with: |
-        if new_state.garden_sensors_moisture > 0.25:
+        if new_state.sensors_garden_moisture > 0.25:
           reward = 100
         else:
           reward = -10
 
     - reward: open_valve_half
       with: |
-        if new_state.garden_sensors_moisture < 0.25:
+        if new_state.sensors_garden_moisture < 0.25:
           reward = 10
         else:
           reward = -25
 
     - reward: open_valve_full
       with: |
-        if new_state.garden_sensors_moisture < 0.25:
+        if new_state.sensors_garden_moisture < 0.25:
           reward = 10
         else:
           reward = -50
