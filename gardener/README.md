@@ -139,7 +139,7 @@ training:
           reward = -50
 ```
 
-Here, we tell Spice AI how we want to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice AI will learn to take this action more frequently as it trains. We can use values from our Datasources to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here we are using `new_state.sensors_garden_moisture`.
+This section tells Spice AI to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice AI will learn to take this action more frequently as it trains. You can use values from your Datasources to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here the `new_state.sensors_garden_moisture` is being used to either reward or penalize opening or closing the watering valve.
 
 ### Inferencing
 
