@@ -72,7 +72,7 @@ Time (s): 1616749200 Temperature (C): 3.678 Moisture (%): 0.286
 
 ### Datasources
 
-Open the `gardener` pod manifest at `.spice/pods/gardener.yaml`, paying particular attention to the `datasources` section:
+Open the `gardener` pod manifest at [.spice/pods/gardener.yaml](.spice/pods/gardener.yaml), paying particular attention to the `datasources` section:
 
 ```
 datasources:
@@ -143,7 +143,7 @@ Here, we tell Spice AI how we want to reward each action, given the state at tha
 
 ### Inferencing
 
-Open the sample application in `main.py` and look at how it is getting recommendations from Spice AI:
+Open the sample application in [main.py](main.py) and look at how it is getting recommendations from Spice AI:
 
 ```python
 response = requests.get("http://localhost:8000/api/v0.1/pods/gardener/inference")
@@ -166,8 +166,10 @@ Spice AI provides an easy way to get recommendations at any point via a simple `
 }
 ```
 
-Here you can see the window of time inferred on (`start` to `end`), the action Spice AI recommends ("close_valve"), and Spice AI's confidence in that recommendation.  You can learn more about inferencing through the Spice AI API in the [documentation](https://crispy-dollop-c329115a.pages.github.io/#/api/README?id=api).
+Here you can see the window of time inferred on (`start` to `end`), the action Spice AI recommends ("close_valve"), and Spice AI's confidence in that recommendation expressed as a percentage.  You can learn more about inferencing through the Spice AI API in the [documentation](https://crispy-dollop-c329115a.pages.github.io/#/api/README?id=api).
 
 ## Next steps
 
-- Review the [Spice AI documentation](https://crispy-dollop-c329115a.pages.github.io/#/?id=reference) on the Pod manifest
+- Learn more about the [Spice AI API](https://crispy-dollop-c329115a.pages.github.io/#/api/README?id=api) and how you can use it to integrate with your app.
+- Review the [Core Concepts](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README) of Spice AI and how they can help you better leverage its capabilities.
+- Try out the other [samples](../README.md) in this repository.
