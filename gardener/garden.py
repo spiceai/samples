@@ -15,10 +15,10 @@ class Garden:
     # 86400 seconds per day
     STEPS_PER_DAY = 86400 / STEP_INTERVAL_SECONDS
 
-    def __init__(self, moisture, temperature, initial_time_unix_seconds):
+    def __init__(self, initial_time_unix_seconds, moisture, temperature):
+        self.time_unix_seconds = initial_time_unix_seconds
         self.moisture = moisture
         self.temperature = temperature
-        self.time_unix_seconds = initial_time_unix_seconds
 
     def get_moisture(self):
         return self.moisture
@@ -29,13 +29,13 @@ class Garden:
     def get_time_unix_seconds(self):
         return self.time_unix_seconds
 
-    def water_half(self):
+    def open_valve_half(self):
         if self.moisture >= 0.99:
             return
 
         self.moisture += 0.005 * ((100 - self.temperature) / 100)
 
-    def water_full(self):
+    def open_valve_full(self):
         if self.moisture >= 0.99:
             return
 
