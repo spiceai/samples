@@ -28,6 +28,7 @@ training:
   rewards:
     - reward: close_valve
       with: |
+        # Reward keeping moisture content above 25%
         if new_state.sensors_garden_moisture > 0.25:
           reward = 100
         else:
@@ -35,6 +36,7 @@ training:
 
     - reward: open_valve_half
       with: |
+        # Reward watering when needed, but penalize wasting water
         if new_state.sensors_garden_moisture < 0.25:
           reward = 10
         else:
@@ -42,6 +44,7 @@ training:
 
     - reward: open_valve_full
       with: |
+        # Reward watering when needed, but penalize wasting even more water
         if new_state.sensors_garden_moisture < 0.25:
           reward = 10
         else:
