@@ -23,7 +23,7 @@ class Garden:
         return self.time_unix_seconds
 
     def open_valve_half(self):
-        if self.moisture >= 0.99:
+        if self.moisture >= 0.995:
             return
 
         self.moisture += 0.005 * ((100 - self.temperature) / 100)
@@ -45,7 +45,7 @@ class Garden:
             % Garden.STEPS_PER_DAY
         ) > (Garden.STEPS_PER_DAY / 2)
 
-        if is_afternoon and self.temperature < 99.3:
+        if is_afternoon and self.temperature < 99.7:
             self.temperature += 0.3 * random.random()
         elif not is_afternoon and self.temperature > 0.3:
             self.temperature -= 0.3 * random.random()

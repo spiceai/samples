@@ -15,7 +15,7 @@ def maintain_garden_moisture_content(garden):
         while True:
             # Simulate passage of time and add observations to the data set
             print(
-                f"Time: {garden.get_time_unix_seconds()} Temperature: {round(garden.get_temperature(),3)} Moisture: {round(garden.get_moisture(),3)}"
+                f"Time (s): {garden.get_time_unix_seconds()} Temperature (C): {round(garden.get_temperature(),3)} Moisture (%): {round(garden.get_moisture(),3)}"
             )
 
             for _ in range(6):
