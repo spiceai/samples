@@ -32,17 +32,17 @@ def maintain_garden_moisture_content(garden):
             recommended_action = None
 
             try:
-                # Get a recommendation from Spice AI
+                # Get a recommendation from Spice.ai
                 response = requests.get(SPICE_AI_INFERENCE_URL)
                 response_json = response.json()
                 recommended_action = response_json["action"]
             except Exception:
                 print(
-                    f"Failed get inference from Spice AI.  Is the runtime started ('spice run')?"
+                    f"Failed get inference from Spice.ai.  Is the runtime started ('spice run')?"
                 )
                 return
 
-            # Take action based on Spice AI's recommendation
+            # Take action based on Spice.ai's recommendation
             if recommended_action == "open_valve_full":
                 garden.open_valve_full()
                 print("Watering at full flow")
