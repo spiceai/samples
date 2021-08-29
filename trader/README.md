@@ -2,7 +2,7 @@
 
 A basic Bitcoin trading bot example.
 
-Let's try an example that uses data from a CSV file to train.  We will be training a model that uses historical Bitcoin prices to learn when to trade effectively.
+Let's try an example that uses data from a CSV file to train. We will be training a model that uses historical Bitcoin prices to learn when to trade effectively.
 
 First, ensure this `samples` repository is cloned.
 
@@ -28,7 +28,7 @@ In the Spice runtime terminal, you will observe the runtime loading the CSV from
 
 Now, let's update the starting balances for the portfolio so the app has more capital to trade with.
 
-*Change*
+_Change_
 
 ```yaml
 fields:
@@ -38,19 +38,19 @@ fields:
     initializer: 0 # update with the starting balance to train with
 ```
 
-*to*
+_to_
 
 ```yaml
 fields:
-      - name: usd_balance
-        initializer: 1000
-      - name: btc_balance
-        initializer: 10
+  - name: usd_balance
+    initializer: 1000
+  - name: btc_balance
+    initializer: 10
 ```
 
 Feel free to try whatever amounts you'd like!
 
-Now, save the file.  You should observe a new training run begin in the Spice runtime. If you'd like to start training manually, use this command.
+Now, save the file. You should observe a new training run begin in the Spice runtime. If you'd like to start training manually, use this command.
 
 ```bash
 spice pod train trader
@@ -69,7 +69,7 @@ You'll see a result you can take action on immediately:
 ```json
 {
   "action": "buy",
-  "confidence": 0.90,
+  "confidence": 0.9,
   "end": "Mon Jul 19 12:34:00 2021",
   "start": "Mon Jul 19 12:29:00 2021",
   "tag": "latest"
@@ -86,7 +86,7 @@ curl http://localhost:8000/api/v0.1/pods/trader/observations
 
 ## Integrate with your app
 
-You can easily use your newly trained model in your app.  Spice AI works with any language using a simple REST API.  Here is a simple example that will fetch inferences for a Javascript app:
+You can easily use your newly trained model in your app. Spice.ai works with any language using a simple REST API. Here is a simple example that will fetch inferences for a Javascript app:
 
 ```js
 const fetch = require("node-fetch");
