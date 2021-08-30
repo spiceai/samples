@@ -11,6 +11,7 @@ This sample requires
 - [Spice.ai](https://crispy-dollop-c329115a.pages.github.io/#/install)
 - [Docker](https://docs.docker.com/get-docker/) (v20.10 for Linux or v18.03 for Windows/MacOS)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+- [Powershell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1)
 
 ## Collect CPU metrics
 
@@ -58,28 +59,27 @@ spice train logpruner
 
 In the Spice.ai runtime terminal, you will observe the runtime load CPU metrics and begin to train!
 
-## Getting recommendations from Spice.ai
+## Start the server maintenance app
 
-Once the training has completed, try fetching a recommendation.
+While Spice.ai is training the model, start the server maintenance app that comes with this sample:
 
 ```bash
-curl http://localhost:8000/api/v0.1/pods/logpruner/recommendation
+pwsh ./logpruner.ps1
 ```
 
-You'll see a result telling you if now is a good time to prune logs or not, along with Spice.ai's confidence in that recommendation. Cool!
+You should see output that looks like:
 
-```json
-{
-  "response": {
-    "result": "ok"
-  },
-  "start": 1629764010,
-  "end": 1629764610,
-  "action": "prune_logs",
-  "confidence": 0.614,
-  "tag": "latest"
-}
 ```
+Server Maintenance v0.1!
+
+Ctrl-C to stop running
+
+Time to perform a maintenance run, checking to see if now is a good time to run
+Recommendation to do_not_prune_logs with confidence
+Recommendation has a confidence of 0. Has this pod been trained yet?
+```
+
+Once the pod has finished training, the output should change to show that now is a good time to run server maintenance or not.
 
 ## How it works
 
@@ -87,11 +87,11 @@ Spice.ai was able to use the Telegraf data stored in InfluxDB along with definit
 
 Open the Pod manifest `logpruner.yml` in the `.spice/pods` directory.
 
-Review the `datasources` section on how the data was connected.
+Review the `dataspaces` section on how the data was connected.
 
 ```yaml
 <snip>
-datasources:
+dataspaces:
 - from: hostmetrics
   name: cpu
   data:
@@ -113,7 +113,7 @@ datasources:
 <snip>
 ```
 
-A Spice.ai Datasource has two components, a Connector and a Processor. A Connector fetches data from a specific source, like a database or a file. A Processor takes the data that the Connector has fetched and transforms it into a format Spice.ai can use. In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor. We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
+A Spice.ai Dataspace has two components, a Connector and a Processor. A Connector fetches data from a specific source, like a database or a file. A Processor takes the data that the Connector has fetched and transforms it into a format Spice.ai can use. In this example, we are using the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor. We will extract the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
 
 In the `params` section of the InfluxDB Connector, notice we are using environment variables prefixed with `SPICE_` to pass configuration. Any environment variable with this prefix will automatically be replaced with its value by the Spice.ai runtime.
 
@@ -148,7 +148,7 @@ training:
       with: reward = 100 if new_state.hostmetrics_cpu_usage_idle < 0.90 else -10
 ```
 
-Here, we tell Spice.ai how we want to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. We can use values from our Datasources to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here we are using `new_state.hostmetrics_cpu_usage_idle`.
+Here, we tell Spice.ai how we want to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. We can use values from our Dataspaces to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here we are using `new_state.hostmetrics_cpu_usage_idle`.
 
 ## Next steps
 

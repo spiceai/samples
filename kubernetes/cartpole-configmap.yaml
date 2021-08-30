@@ -9,7 +9,7 @@ data:
       interval: 10s
       period: 3000s
 
-    datasources:
+    dataspaces:
       - from: gym
         name: CartPole
         fields:

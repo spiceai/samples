@@ -24,7 +24,7 @@ cd samples/gardener
 spice run
 ```
 
-You will observe the Spice.ai runtime start up and load a `sensors/garden` datasource.
+You will observe the Spice.ai runtime start up and load a `sensors/garden` dataspace.
 
 ## Use Spice.ai to a train a model
 
@@ -70,14 +70,13 @@ Time (s): 1616749200 Temperature (C): 3.678 Moisture (%): 0.286
 
 ## How it works
 
-### Datasources
+### Dataspaces
 
-Open the `gardener` pod manifest at [.spice/pods/gardener.yaml](.spice/pods/gardener.yaml), paying particular attention to the `datasources` section:
+Open the `gardener` pod manifest at [.spice/pods/gardener.yaml](.spice/pods/gardener.yaml), paying particular attention to the `dataspaces` section:
 
 ```
-datasources:
-  - datasource:
-    from: sensors
+dataspaces:
+  - from: sensors
     name: garden
     fields:
       - name: temperature
@@ -91,7 +90,7 @@ datasources:
         name: csv
 ```
 
-This particular Spice.ai [datasource](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=datasource) is using a `csv` [data processor](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-processor) and a `file` [data connector](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-connector) to extract the `temperature` and `moisture` columns from `data/garden_data.csv`. You can learn more about datasources in the [Core Concepts](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README) section of the Spice.ai documentation.
+This particular Spice.ai [dataspace](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=dataspace) is using a `csv` [data processor](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-processor) and a `file` [data connector](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-connector) to extract the `temperature` and `moisture` columns from `data/garden_data.csv`. You can learn more about dataspaces in the [Core Concepts](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README) section of the Spice.ai documentation.
 
 ### Actions
 
@@ -138,7 +137,7 @@ training:
           reward = -50
 ```
 
-This section tells Spice.ai to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. You can use values from your Datasources to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here the `new_state.sensors_garden_moisture` is being used to either reward or penalize opening or closing the watering valve.
+This section tells Spice.ai to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. You can use values from your Dataspaces to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. Here the `new_state.sensors_garden_moisture` is being used to either reward or penalize opening or closing the watering valve.
 
 ### Recommendations
 

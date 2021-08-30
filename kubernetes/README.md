@@ -15,7 +15,7 @@ cd samples/kubernetes
 
 ## Standalone
 
-First, we will create a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) that contains our Pod definition. A Pod definition tells Spice.ai which Datasources, Actions, and training parameters it should use to provide recommendations to your app. For this sample, we will use the CartPole Pod definition from the the Spice.ai Registry. Let's add it now:
+First, we will create a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) that contains our Pod definition. A Pod definition tells Spice.ai which Dataspaces, Actions, and training parameters it should use to provide recommendations to your app. For this sample, we will use the CartPole Pod definition from the the Spice.ai Registry. Let's add it now:
 
 ```bash
 kubectl apply -f cartpole-configmap.yaml
