@@ -6,7 +6,7 @@ Adding Spice.ai to your [Kubernetes](https://kubernetes.io/) cluster is easy.
 
 This example assumes you have a working Kubernetes cluster set up and can access it via `kubectl`. For help setting up a cluster, consult the [Kubernetes Documentation](https://kubernetes.io/docs/setup/).
 
-Ensure this `samples` repository is cloned and you are in the `kubernetes` directory.
+Ensure this `samples` repository is cloned and you are in the `kubernetes` directory:
 
 ```bash
 git clone https://github.com/spiceai/samples.git
@@ -15,25 +15,25 @@ cd samples/kubernetes
 
 ## Standalone
 
-First, we will create a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) that contains our Pod definition. A Pod definition tells Spice.ai which Dataspaces, Actions, and training parameters it should use to provide recommendations to your app. For this sample, we will use the CartPole Pod definition from the the Spice.ai Registry. Let's add it now:
+First, create a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) that contains your Pod definition and training data. A Pod definition tells Spice.ai which Dataspaces, Actions, and training parameters it should use to provide recommendations to your app. This sample will use the Trader Pod definition from the the Spice.ai Registry. Add it now:
 
 ```bash
 kubectl apply -f trader-configmap.yaml
 ```
 
-Next, we will create a Spice.ai [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) to start Spice.ai in our cluster:
+Next, create a Spice.ai [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) to start Spice.ai in the cluster:
 
 ```bash
 kubectl apply -f spiceai-deployment.yaml
 ```
 
-Once the deployment has finished, we can add a [Service](https://kubernetes.io/docs/concepts/services-networking/service/) to allow other apps within our cluster to access Spice.ai:
+Once the deployment has finished, add a [Service](https://kubernetes.io/docs/concepts/services-networking/service/) to allow other apps within the cluster to access Spice.ai:
 
 ```bash
 kubectl apply -f spiceai-service.yaml
 ```
 
-This will create a [ClusterIP](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) Service that other apps within the cluster can access. To test this out, you can spin up a debug container and access it:
+This will create a [ClusterIP](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) Service that other apps within the cluster can access. To test this out, spin up a debug container and access it:
 
 ```bash
 kubectl run -i --tty --rm debug --image=alpine --restart=Never -- sh
