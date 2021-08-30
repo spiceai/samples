@@ -6,7 +6,9 @@ import requests
 from garden import Garden
 
 GARDEN_DATA_CSV_PATH = "data/garden_data.csv"
-SPICE_AI_INFERENCE_URL = "http://localhost:8000/api/v0.1/pods/gardener/inference"
+SPICE_AI_RECOMMENDATION_URL = (
+    "http://localhost:8000/api/v0.1/pods/gardener/recommendation"
+)
 
 
 def maintain_garden_moisture_content(garden):
@@ -33,12 +35,12 @@ def maintain_garden_moisture_content(garden):
 
             try:
                 # Get a recommendation from Spice.ai
-                response = requests.get(SPICE_AI_INFERENCE_URL)
+                response = requests.get(SPICE_AI_RECOMMENDATION_URL)
                 response_json = response.json()
                 recommended_action = response_json["action"]
             except Exception:
                 print(
-                    f"Failed get inference from Spice.ai.  Is the runtime started ('spice run')?"
+                    f"Failed get recommendation from Spice.ai.  Is the runtime started ('spice run')?"
                 )
                 return
 

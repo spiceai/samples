@@ -63,7 +63,7 @@ In the Spice.ai runtime terminal, you will observe the runtime load CPU metrics 
 Once the training has completed, try fetching a recommendation.
 
 ```bash
-curl http://localhost:8000/api/v0.1/pods/logpruner/inference
+curl http://localhost:8000/api/v0.1/pods/logpruner/recommendation
 ```
 
 You'll see a result telling you if now is a good time to prune logs or not, along with Spice.ai's confidence in that recommendation. Cool!
