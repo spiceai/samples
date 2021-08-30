@@ -18,7 +18,7 @@ cd samples/kubernetes
 First, we will create a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) that contains our Pod definition. A Pod definition tells Spice.ai which Dataspaces, Actions, and training parameters it should use to provide recommendations to your app. For this sample, we will use the CartPole Pod definition from the the Spice.ai Registry. Let's add it now:
 
 ```bash
-kubectl apply -f cartpole-configmap.yaml
+kubectl apply -f trader-configmap.yaml
 ```
 
 Next, we will create a Spice.ai [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) to start Spice.ai in our cluster:
@@ -40,8 +40,8 @@ kubectl run -i --tty --rm debug --image=alpine --restart=Never -- sh
 
 (inside the new container)
 # apk add --no-cache curl
-# curl http://spiceai:8000/api/v0.1/pods/cartpole-v1/recommendation
-{"action":"right","confidence":0.0,"end":"2021-08-18T20:59:10","start":"2021-08-18T20:59:00","tag":"latest"}
+# curl http://spiceai:8000/api/v0.1/pods/trader/recommendation
+{"response":{"result":"ok"},"start":1607886000,"end":1607907600,"action":"sell","tag":"latest"}
 ```
 
 Cool! If you would like to access Spice.ai from outside the cluster, try changing the `type` of the Service in `spiceai-service.yaml` to either a `NodePort` or a `LoadBalancer`, depending on how your cluster is set up.
@@ -60,27 +60,28 @@ spec:
         ports:
         - containerPort: 8000
         volumeMounts:
-        - name: spice
-          mountPath: /userapp/.spice
+        - name: userapp
+          mountPath: /userapp
       initContainers:
       - name: spiceai-init
         image: busybox
-        command: ['/bin/sh', '-c', 'mkdir -p /spice/pods && cp /cartpole/cartpole-v1.yaml /spice/pods/cartpole-v1.yaml']
+        command: ['/bin/sh', '-c', 'mkdir -p /userapp/.spice/pods && cp /trader/trader.yaml /userapp/.spice/pods/trader.yaml && cp /trader/btcusd.csv /userapp/btcusd.csv']
         volumeMounts:
-        - name: spice
-          mountPath: /spice
-        - name: cartpole-volume
-          mountPath: /cartpole
+        - name: userapp
+          mountPath: /userapp
+        - name: trader-volume
+          mountPath: /trader
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
       volumes:
-        - name: cartpole-volume
+        - name: trader-volume
           configMap:
-            name: cartpole
-        - name: spice
+            name: trader
+        - name: userapp
           emptyDir: {}
+
 ```
 
 Once you've added this, Spice.ai will be reachable from your application at `http://localhost:8000`!

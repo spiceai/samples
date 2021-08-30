@@ -20,25 +20,25 @@ spec:
         ports:
         - containerPort: 8000
         volumeMounts:
-        - name: spice
-          mountPath: /userapp/.spice
+        - name: userapp
+          mountPath: /userapp
       initContainers:
       - name: spiceai-init
         image: busybox
-        command: ['/bin/sh', '-c', 'mkdir -p /spice/pods && cp /cartpole/cartpole-v1.yaml /spice/pods/cartpole-v1.yaml']
+        command: ['/bin/sh', '-c', 'mkdir -p /userapp/.spice/pods && cp /trader/trader.yaml /userapp/.spice/pods/trader.yaml && cp /trader/btcusd.csv /userapp/btcusd.csv']
         volumeMounts:
-        - name: spice
-          mountPath: /spice
-        - name: cartpole-volume
-          mountPath: /cartpole
+        - name: userapp
+          mountPath: /userapp
+        - name: trader-volume
+          mountPath: /trader
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
       volumes:
-        - name: cartpole-volume
+        - name: trader-volume
           configMap:
-            name: cartpole
-        - name: spice
+            name: trader
+        - name: userapp
           emptyDir: {}
 
