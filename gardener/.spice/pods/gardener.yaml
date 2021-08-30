@@ -4,9 +4,8 @@ params:
   granularity: 10m
   interval: 1h
   period: 100d
-datasources:
-  - datasource:
-    from: sensors
+dataspaces:
+  - from: sensors
     name: garden
     fields:
       - name: temperature
