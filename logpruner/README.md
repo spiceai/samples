@@ -43,6 +43,12 @@ cd logpruner
 source set-spice-vars.sh
 ```
 
+Add the LogPruner pod from spicerack.org by using the CLI:
+
+```bash
+spice add samples/logpruner
+```
+
 Now, start the Spice.ai runtime:
 
 ```bash
@@ -113,7 +119,7 @@ dataspaces:
 <snip>
 ```
 
-A Spice.ai Dataspace has two components, a Connector and a Processor. A Connector fetches data from a specific source, like a database or a file. A Processor takes the data that the Connector has fetched and transforms it into a format Spice.ai can use. This example uses the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor.  It extracts the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
+A Spice.ai Dataspace has two components, a Connector and a Processor. A Connector fetches data from a specific source, like a database or a file. A Processor takes the data that the Connector has fetched and transforms it into a format Spice.ai can use. This example uses the `influxdb` Connector to provide [Flux Annotated CSV](https://docs.influxdata.com/influxdb/cloud/reference/syntax/annotated-csv/) to the `flux-csv` processor. It extracts the `usage_idle` field of measurements taken from the `cpu`, where `usage_idle` refers to the percentage of time the CPU has spent in an idle state.
 
 In the `params` section of the InfluxDB Connector, notice the use of environment variables prefixed with `SPICE_` to pass configuration. Any environment variable with this prefix will automatically be replaced with its value by the Spice.ai runtime.
 
