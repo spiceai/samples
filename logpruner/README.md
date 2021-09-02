@@ -141,20 +141,47 @@ Spice.ai learns which action to recommend by rewarding or penalizing an action u
 
 ```yaml
 training:
-  rewards:
-    # Reward pruning logs at a time when load is anticipated to be low
-    # The lower the load, the higher the reward
-    # Penalize pruning logs harshly at a time when load is high (idle < 90%)
-    - reward: prune_logs
-      with: reward = new_state.hostmetrics_cpu_usage_idle * 100 if new_state.hostmetrics_cpu_usage_idle > 0.90 else -1000
+  reward_init: |
+    load_trend_magnitude = new_state.hostmetrics_cpu_usage_idle - prev_state.hostmetrics_cpu_usage_idle
+    if load_trend_magnitude < 0:
+      load_trend_magnitude *= -1
 
-    # Reward not pruning logs under load
-    # Penalize not pruning logs slightly when load is low (idle > 90%)
+  rewards:
+    - reward: prune_logs
+      with: |
+        # Reward pruning logs at a time when load is low
+        if new_state.hostmetrics_cpu_usage_idle > 0.90:
+          # The lower the load, the higher the reward
+          reward = 100 * new_state.hostmetrics_cpu_usage_idle
+
+          # Add an additional reward if the load trend is stable
+          if load_trend_magnitude < 0.02:
+            reward *= 2
+        
+        else:
+          # Penalize pruning logs at a time when load is high (idle < 90%)
+          # The higher the load, the more harsh the penalty should be 
+          reward = -1000 * (1 - new_state.hostmetrics_cpu_usage_idle)
+    
     - reward: do_not_prune_logs
-      with: reward = 100 if new_state.hostmetrics_cpu_usage_idle < 0.90 else -10
+      with: |
+        # Reward not pruning logs under load
+        # The higher the load, the higher the reward
+        if new_state.hostmetrics_cpu_usage_idle < 0.90:
+          reward = -100 * new_state.hostmetrics_cpu_usage_idle
+
+        # Penalize not pruning logs slightly when load is low (idle > 90%)
+        else:
+          reward = -10
+
+          # If the load trend is unstable, do not apply the penalty
+          if load_trend_magnitude > 0.05:
+            reward = 0
 ```
 
-This section tells Spice.ai how to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. You can use values from our Dataspaces to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. This example uses `new_state.hostmetrics_cpu_usage_idle`.
+This section tells Spice.ai how to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. You can use values from your Dataspaces to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. This example uses `new_state.hostmetrics_cpu_usage_idle` and `new_state.hostmetrics_cpu_usage_idle`.
+
+Notice the `reward_init` section.  This section can be used to for common initialization tasks that will be applied to every action's reward function.  In this example, a `load_trend_magnitude` variable is created to reason about the stability of the system's load from one moment to the next.
 
 ## Next steps
 
