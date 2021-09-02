@@ -43,6 +43,12 @@ cd logpruner
 source set-spice-vars.sh
 ```
 
+Add the LogPruner pod from the SpiceRack registry by using the CLI:
+
+```bash
+spice add samples/LogPruner
+```
+
 Now, start the Spice.ai runtime:
 
 ```bash
