@@ -44,7 +44,7 @@ def maintain_garden_moisture_content(garden):
             )
 
         try:
-            response = requests.post(SPICE_AI_OBSERVATIONS_URL, data=output.getvalue())
+            requests.post(SPICE_AI_OBSERVATIONS_URL, data=output.getvalue())
         except Exception:
             print(
                 f"Failed to post observations to Spice.ai.  Is the runtime started ('spice run')?"
