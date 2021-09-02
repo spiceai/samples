@@ -17,10 +17,11 @@ First, ensure this `samples` repository is cloned.
 git clone https://github.com/spiceai/samples.git
 ```
 
-Move to the `gardener` directory and start the Spice.ai runtime.
+Move to the `gardener` directory, retrieve the gardener pod from SpiceRack and start the Spice.ai runtime.
 
 ```bash
 cd samples/gardener
+spice add samples/Gardener
 spice run
 ```
 
