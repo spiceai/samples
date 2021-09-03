@@ -6,7 +6,7 @@ This sample uses temperature and moisture sensor data as input to Spice.ai to wa
 
 This sample requires
 
-- [Spice.ai](https://crispy-dollop-c329115a.pages.github.io/#/install)
+- [Spice.ai](https://docs.spiceai.org/getting-started/install-spiceai/)
 - [Python 3](https://www.python.org/downloads/)
 
 ## Start the Spice.ai runtime
@@ -91,7 +91,7 @@ dataspaces:
         name: csv
 ```
 
-This particular Spice.ai [dataspace](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=dataspace) is using a `csv` [data processor](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-processor) and a `file` [data connector](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README?id=data-connector) to extract the `temperature` and `moisture` columns from `data/garden_data.csv`. You can learn more about dataspaces in the [Core Concepts](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README) section of the Spice.ai documentation.
+This particular Spice.ai [dataspace](https://docs.spiceai.org/concepts/#dataspace) is using a `csv` [data processor](https://docs.spiceai.org/concepts/#data-processor) and a `file` [data connector](https://docs.spiceai.org/concepts/#data-connector) to extract the `temperature` and `moisture` columns from `data/garden_data.csv`. You can learn more about dataspaces in the [Concepts](https://docs.spiceai.org/concepts/) section of the Spice.ai documentation.
 
 ### Actions
 
@@ -213,10 +213,10 @@ Spice.ai provides an easy way to get recommendations at any point via a simple `
 }
 ```
 
-Here you can see the window of time the recommendation is based on (`start` to `end`), the action Spice.ai recommends ("close_valve"), and Spice.ai's confidence in that recommendation expressed as a percentage. You can learn more about recommendations through the Spice.ai API in the [documentation](https://crispy-dollop-c329115a.pages.github.io/#/api/README?id=api).
+Here you can see the window of time the recommendation is based on (`start` to `end`), the action Spice.ai recommends ("close_valve"), and Spice.ai's confidence in that recommendation expressed as a percentage. You can learn more about recommendations through the Spice.ai API in the [documentation](https://docs.spiceai.org/reference/api/).
 
 ## Next steps
 
-- Learn more about the [Spice.ai API](https://crispy-dollop-c329115a.pages.github.io/#/api/README?id=api) and how you can use it to integrate with your app.
-- Review the [Core Concepts](https://crispy-dollop-c329115a.pages.github.io/#/concepts/README) of Spice.ai and how they can help you better leverage its capabilities.
+- Learn more about the [Spice.ai API](https://docs.spiceai.org/reference/api/) and how you can use it to integrate with your app.
+- Review the [Concepts](https://docs.spiceai.org/concepts/) of Spice.ai and how they can help you better leverage its capabilities.
 - Try out the other [samples](../README.md) in this repository.
