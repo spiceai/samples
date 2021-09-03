@@ -8,7 +8,7 @@ This sample uses CPU metrics as in input to Spice.ai to recommend the best time 
 
 This sample requires
 
-- [Spice.ai](https://crispy-dollop-c329115a.pages.github.io/#/install)
+- [Spice.ai](https://docs.spiceai.org/getting-started/install-spiceai/)
 - [Docker](https://docs.docker.com/get-docker/) (v20.10 for Linux or v18.03 for Windows/MacOS)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Powershell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1)
@@ -158,4 +158,4 @@ This section tells Spice.ai how to reward each action, given the state at that s
 
 ## Next steps
 
-- Review the [Spice.ai documentation](https://crispy-dollop-c329115a.pages.github.io/#/?id=reference) on the Pod manifest
+- Review the [Spice.ai documentation](https://docs.spiceai.org/reference/pod/) on the Pod manifest
