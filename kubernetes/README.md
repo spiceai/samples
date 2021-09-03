@@ -65,7 +65,7 @@ spec:
       initContainers:
       - name: spiceai-init
         image: busybox
-        command: ['/bin/sh', '-c', 'mkdir -p /userapp/.spice/pods && cp /trader/trader.yaml /userapp/.spice/pods/trader.yaml && cp /trader/btcusd.csv /userapp/btcusd.csv']
+        command: ['/bin/sh', '-c', 'mkdir -p /userapp/spicepods && cp /trader/trader.yaml /userapp/spicepods/trader.yaml && cp /trader/btcusd.csv /userapp/btcusd.csv']
         volumeMounts:
         - name: userapp
           mountPath: /userapp

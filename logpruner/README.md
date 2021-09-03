@@ -91,7 +91,7 @@ Once the pod has finished training, the output should change to show that now is
 
 Spice.ai was able to use the Telegraf data stored in InfluxDB along with definitions for possible actions it can recommend to train and provide a recommendation on when to prune logs.
 
-Open the Pod manifest `logpruner.yml` in the `.spice/pods` directory.
+Open the Pod manifest `logpruner.yml` in the `spicepods` directory.
 
 Review the `dataspaces` section on how the data was connected.
 
