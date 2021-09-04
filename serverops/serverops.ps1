@@ -1,12 +1,12 @@
 #!/usr/local/bin/pwsh
 
-# This is a server ops application written in Powershell that queries Spice AI
-# for intelligent recommendations on when it would be a good time to perform maintenance or preload a cache.
-# This application will only take action if the confidence is higher than 50%. 
-# This application checks every 5 seconds to see if we should take action, however 
+# This is a log pruning application written in Powershell that queries Spice AI
+# for intelligent recommendations on when it would be a good time to prune logs.
+# This application will only prune logs if the confidence is higher than 50%. 
+# This application checks every 5 seconds to see if we should prune the logs, however 
 # in a real server monitoring application this period would likely be longer.
 
-Write-Host "Server Maintenance v0.1!"
+Write-Host "Server Ops v0.1!"
 Write-Host
 Write-Host "Ctrl-C to stop running"
 Write-Host
@@ -38,17 +38,17 @@ function Invoke-TryPerformMaintenance {
   }
 
   if ($Recommendation.confidence -gt 0.5 -and $Recommendation.action -eq "perform_maintenance") {
-    Write-Host "Running server maintenance now!"
+    Write-Host "Performing server maintenance now!"
   } else if ($Recommendation.confidence -gt 0.5 -and $Recommendation.action -eq "preload_cache") {
     Write-Host "Preloading cache now!"
   }
   else {
-    Write-Host "Deferring server operations to later"
+    Write-Host "Not performing any server operations"
   }
 }
 
 while ($true) {
-  Write-Host "Checking to see if now is a good time to run"
+  Write-Host "Checking for a server operation recommendation"
 
   $recommendation = Get-Recommendation
   if (!$recommendation) {
