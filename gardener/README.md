@@ -73,7 +73,7 @@ Time (s): 1616749200 Temperature (C): 3.678 Moisture (%): 0.286
 
 ### Dataspaces
 
-Open the `gardener` pod manifest at [.spice/pods/gardener.yaml](.spice/pods/gardener.yaml), paying particular attention to the `dataspaces` section:
+Open the `gardener` pod manifest at [spicepods/gardener.yaml](spicepods/gardener.yaml), paying particular attention to the `dataspaces` section:
 
 ```
 dataspaces:

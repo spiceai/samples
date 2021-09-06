@@ -91,7 +91,7 @@ Once the pod has finished training, the output should change to show that now is
 
 Spice.ai was able to use the Telegraf data stored in InfluxDB along with definitions for possible actions it can recommend to train and provide a recommendation on when to run server operations.
 
-Open the Pod manifest `serverops.yml` in the `.spice/pods` directory.
+Open the Pod manifest `serverops.yml` in the `spicepods` directory.
 
 Review the `dataspaces` section on how the data was connected.
 
@@ -147,7 +147,7 @@ training:
     cpu_usage_new = 100 - new_state.hostmetrics_cpu_usage_idle
     cpu_usage_prev = 100 - prev_state.hostmetrics_cpu_usage_idle
     cpu_usage_delta = cpu_usage_new - cpu_usage_prev
-    
+
     cpu_usage_delta_abs = cpu_usage_delta
     if cpu_usage_delta_abs < 0:
       cpu_usage_delta_abs *= -1
@@ -161,7 +161,7 @@ training:
           # Add an additional reward if the cpu usage trend is stable
           if cpu_usage_delta_abs < 2:
             reward *= 1.5
-        
+
         else:
           # Penalize performing maintenance at a time when cpu usage is high
           # The higher the cpu usage, the more harsh the penalty should be 
@@ -174,7 +174,7 @@ training:
         # so give a negative reward based on the change
         if cpu_usage_new > high_cpu_usage_threshold and cpu_usage_delta > 25:
           reward = -cpu_usage_delta
-     
+
         # Reward preloading during low cpu usage
         else:
           reward = high_cpu_usage_threshold - cpu_usage_new
@@ -195,7 +195,7 @@ training:
 
 This section tells Spice.ai how to reward each action, given the state at that step. These rewards are defined by simple Python expressions that assign a value to `reward`. A higher value means Spice.ai will learn to take this action more frequently as it trains. You can use values from your Dataspaces to calculate these rewards. They can be accessed with the expression `(new_state|prev_state).(from)_(name)_(field)`. This example uses `new_state.hostmetrics_cpu_usage_idle` and `new_state.hostmetrics_cpu_usage_idle`.
 
-Notice the `reward_init` section.  This section can be used to for common initialization tasks that will be applied to every action's reward function.  In this example, a `cpu_usage_delta` variable is created to reason about the stability of the system's load from one moment to the next.
+Notice the `reward_init` section. This section can be used to for common initialization tasks that will be applied to every action's reward function. In this example, a `cpu_usage_delta` variable is created to reason about the stability of the system's load from one moment to the next.
 
 ## Next steps
 
