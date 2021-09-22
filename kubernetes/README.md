@@ -71,10 +71,6 @@ spec:
           mountPath: /userapp
         - name: trader-volume
           mountPath: /trader
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
       volumes:
         - name: trader-volume
           configMap:
