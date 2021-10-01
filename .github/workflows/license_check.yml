@@ -4,8 +4,12 @@ name: Check for forbidden licenses
 # Checks for any forbidden/copyleft licenses using their SPDX identifiers
 # (https://spdx.org/licenses/)
 
+# To check Python packages, pip-licenses (https://github.com/raimon49/pip-licenses) is used to
+# generate a listing of packages and their associated licenses.  This listing is checked against a
+# regex in FORBIDDEN_LICENSE_CHECK to ensure no forbidden licenses are present.  If any are detected, the build is failed.  
+
 # List of copyleft licenses derived from Blue Oak Council Guide to Copyleft
-# https://blueoakcouncil.org/copyleft
+# (https://blueoakcouncil.org/copyleft)
 
 # List of forbidden licenses derived from Google License Classifier
 # (https://github.com/google/licenseclassifier)
