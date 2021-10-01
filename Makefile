@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 
-.PHONY: acknowledgements
-acknowledgements:
+.PHONY: generate-acknowledgements
+generate-acknowledgements:
 	echo -e "# Open Source Acknowledgements\n\nSpice.ai would like to acknowledge the following open source projects for making this project possible:\n\nPython Packages\n" > ACKNOWLEDGEMENTS.md
 	python -m venv venv-acknowledgments
 	source venv-acknowledgments/bin/activate
