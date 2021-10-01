@@ -9,3 +9,7 @@ generate-acknowledgements:
 	venv-acknowledgments/bin/pip install pip-licenses
 	venv-acknowledgments/bin/pip-licenses -f csv --with-authors --with-urls 2>/dev/null >> ACKNOWLEDGEMENTS.md
 	rm -rf venv-acknowledgments
+
+	sed -i 's/\"//g' ACKNOWLEDGEMENTS.md
+	sed -i 's/,/, /g' ACKNOWLEDGEMENTS.md
+	sed -i 's/,  /, /g' ACKNOWLEDGEMENTS.md
