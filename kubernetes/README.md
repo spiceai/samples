@@ -56,7 +56,7 @@ spec:
 
       containers:
       - name: spiceai
-        image: ghcr.io/spiceai/spiced:latest
+        image: ghcr.io/spiceai/spiceai:latest
         ports:
         - containerPort: 8000
         volumeMounts:
