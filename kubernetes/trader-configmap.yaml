@@ -7,7 +7,7 @@ data:
     name: trader
     params:
       epoch_time: 1605312000
-      period: 30d
+      period: 720h
       interval: 6h
       granularity: 30m
     dataspaces:
