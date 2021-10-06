@@ -22,26 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOVER: 1.17
-    services:
-      spiceai:
-        # Use latest released version to ensure incoming sample changes do not break it 
-        image: ghcr.io/spiceai/spiceai:0.2-alpha-linux-amd64
-        ports:
-          - 8000:8000
-        options: -v ${{ github.workspace }}/serverops:/userapp --name spicert
     steps:
       - uses: actions/checkout@v2
 
       - name: bring up influxdb/telegraf
         run: docker-compose up -d
-
-      - name: set env vars
-        run: source set-spice-vars.sh
-
-      - name: restart spicert
-        uses: docker://docker
-        with:
-          args: docker restart spicert
 
       - name: update PATH
         run: |
@@ -51,6 +36,16 @@ jobs:
         run: |
           curl https://install.spiceai.org | /bin/bash
 
+      - name: attempt to reach influxdb after 30 seconds
+        run: |
+          sleep 30
+          curl http://localhost:8086
+
+      - name: spice run
+        run: |
+          source set-spice-vars.sh
+          spice run &
+
       - name: wait for Spice.ai runtime healthy
         run: |
           timeout 30 bash -c 'while [[ "$(curl -s -w 200 http://localhost:8000/health)" != "ok200" ]]; do sleep 1; done' || false
@@ -59,14 +54,13 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: attempt to reach influxdb after 30 seconds
-        run: |
-          sleep 30
-          curl http://localhost:8086
-
       - name: get sample pod
         run: |
           spice add samples/serverops
+
+      - name: start training
+        run: |
+          spice train serverops
 
       - name: fetch pods
         run: |
