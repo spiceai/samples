@@ -41,7 +41,11 @@ jobs:
           kubectl rollout status deployment/spiceai-deployment --timeout=240s
           kubectl expose deployment spiceai-deployment --type=LoadBalancer
           kubectl get service --all-namespaces
-          sleep 10
+          sleep 30
+          kubectl get service --all-namespaces
+
+      - name: fetch recommendation
+        run: |
           curl http://localhost:8000/api/v0.1/pods/trader/recommendation
 
       
