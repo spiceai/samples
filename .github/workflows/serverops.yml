@@ -59,8 +59,9 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: attempt to reach influxdb
+      - name: attempt to reach influxdb after 30 seconds
         run: |
+          sleep 30
           curl http://localhost:8086
 
       - name: get sample pod
