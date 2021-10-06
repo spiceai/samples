@@ -1,0 +1,82 @@
+name: gardener
+
+on:
+  push:
+    branches:
+      - trunk
+  pull_request:
+    branches:
+      - trunk
+  schedule:
+    - cron: '19 18 * * 4'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+    working-directory: gardener
+
+jobs:
+  test:
+    name: test gardener
+    runs-on: ubuntu-latest
+    env:
+      GOVER: 1.17
+    services:
+      spiceai:
+        # Use latest released version to ensure incoming sample changes do not break it 
+        image: ghcr.io/spiceai/spiceai:0.2.0-alpha-linux-amd64
+        ports:
+          - 8000:8000
+        options: -v ${{ github.workspace }}/gardener:/userapp --name spicert
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Restart spicert
+        uses: docker://docker
+        with:
+          args: docker restart spicert
+
+      - name: update PATH
+        run: |
+          echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
+
+      - name: install Spice.ai
+        run: |
+          curl https://install.spiceai.org | /bin/bash
+
+      - name: wait for Spice.ai runtime healthy
+        run: |
+          timeout 30 bash -c 'while [[ "$(curl -s -w 200 http://localhost:8000/health)" != "ok200" ]]; do sleep 1; done' || false
+
+      - name: fetch diagnostics
+        run: |
+          curl http://localhost:8000/api/v0.1/diagnostics
+
+      - name: get sample pod
+        run: |
+          spice add samples/gardener
+
+      - name: fetch pods
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods | jq
+      
+      - name: fetch observations
+        run: |
+          curl http://localhost:8000/api/v0.1/pods/gardener/observations
+
+      - name: install python packages
+        run: |
+          pip install -r requirements.txt
+
+      - name: start gardener sample app
+        run: |
+          timeout 60 python main.py | tee gardener.out || true
+
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
+
+      - name: check output for success
+        run: |
+          grep -E "Watering" gardener.out && echo "Found successful action based on recommendation" || exit 1
