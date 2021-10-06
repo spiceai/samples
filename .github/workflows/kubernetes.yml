@@ -38,8 +38,8 @@ jobs:
         run: |
           kubectl apply -f trader-configmap.yaml
           kubectl apply -f spiceai-deployment.yaml
-          kubectl rollout status deployment/spiceai --timeout=240s
-          kubectl expose deployment spiceai --type=LoadBalancer
-          curl http://localhost:8000
+          kubectl rollout status deployment/spiceai-deployment --timeout=240s
+          kubectl expose deployment spiceai-deployment --type=LoadBalancer
+          curl http://spiceai:8000/api/v0.1/pods/trader/recommendation
 
       
