@@ -58,10 +58,6 @@ jobs:
         run: |
           spice add samples/serverops
 
-      - name: start training
-        run: |
-          spice train serverops
-
       - name: fetch pods
         run: |
           curl -s http://localhost:8000/api/v0.1/pods | jq
@@ -80,7 +76,7 @@ jobs:
 
       - name: check output for success
         run: |
-          grep -E "now" serverops.out && echo "Found successful action based on recommendation" || exit 1
+          grep -E "now|performing" serverops.out && echo "Found successful action based on recommendation" || exit 1
       
       - name: fetch observations
         run: |
