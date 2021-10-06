@@ -69,3 +69,19 @@ jobs:
       - name: fetch observations
         run: |
           curl http://localhost:8000/api/v0.1/pods/serverops/observations
+
+      - name: start serverops sample app
+        run: |
+          timeout 60 pwsh serverops.ps1 | tee serverops.out || true
+      
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
+
+      - name: check output for success
+        run: |
+          grep -E "now" serverops.out && echo "Found successful action based on recommendation" || exit 1
+      
+      - name: fetch observations
+        run: |
+          curl http://localhost:8000/api/v0.1/pods/serverops/observation
