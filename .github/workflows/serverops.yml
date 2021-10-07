@@ -1,0 +1,79 @@
+name: serverops
+
+on:
+  push:
+    branches:
+      - trunk
+  pull_request:
+    branches:
+      - trunk
+  schedule:
+    - cron: '19 18 * * 4'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+    working-directory: serverops
+
+jobs:
+  test:
+    name: test serverops
+    runs-on: ubuntu-latest
+    env:
+      GOVER: 1.17
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: bring up influxdb/telegraf
+        run: docker-compose up -d
+
+      - name: update PATH
+        run: |
+          echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
+
+      - name: install Spice.ai
+        run: |
+          curl https://install.spiceai.org | /bin/bash
+
+      - name: wait for influxdb start and metrics collection
+        run: |
+          sleep 30
+          curl http://localhost:8086
+
+      - name: spice run
+        run: |
+          source set-spice-vars.sh
+          spice run &
+
+      - name: wait for Spice.ai runtime healthy
+        run: |
+          timeout 60 bash -c 'while [[ "$(curl -s -w 200 http://localhost:8000/health)" != "ok200" ]]; do sleep 1; done' || false
+
+      - name: fetch diagnostics
+        run: |
+          curl http://localhost:8000/api/v0.1/diagnostics
+
+      - name: get sample pod
+        run: |
+          spice add samples/serverops
+
+      - name: fetch pods
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods | jq
+      
+      - name: fetch observations
+        run: |
+          curl http://localhost:8000/api/v0.1/pods/serverops/observations
+
+      - name: start serverops sample app
+        run: |
+          timeout 60 pwsh serverops.ps1 | tee serverops.out || true
+      
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
+
+      - name: check output for success
+        run: |
+          grep -E "now|performing" serverops.out && echo "Found successful action based on recommendation" || exit 1
