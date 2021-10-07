@@ -20,8 +20,6 @@ jobs:
   test:
     name: test serverops
     runs-on: ubuntu-latest
-    env:
-      GOVER: 1.17
     steps:
       - uses: actions/checkout@v2
 
@@ -76,4 +74,4 @@ jobs:
 
       - name: check output for success
         run: |
-          grep -E "now|performing" serverops.out && echo "Found successful action based on recommendation" || exit 1
+          grep -E "any|now" serverops.out && echo "Found successful action based on recommendation" || exit 1
