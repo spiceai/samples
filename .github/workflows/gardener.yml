@@ -34,9 +34,85 @@ jobs:
         with:
           go-version: ${{ env.GOVER }}
 
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
       - name: Build and copy dashboard
         working-directory: spiceai/dashboard
         run: make
+
+      - name: Build spice
+        run: make
+        working-directory: cmd/spice
+
+      - name: Build spiced
+        run: make
+        working-directory: cmd/spiced
+
+      - name: Cache PIP
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-${{ hashFiles('spiceai/ai/src/requirements/production.txt') }}
+
+      - name: Install requirements
+        working-directory: spiceai/ai/src
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install -r requirements/production.txt
+
+      - name: Ensure correct directory structure
+        run: |
+          mkdir -p $HOME/.spice/bin
+          cp spiceai/cmd/spiced/spiced $HOME/.spice/bin/
+          chmod +x $HOME/.spice/bin/spiced
+          ln -s ${{ github.workspace }}/spiceai/ai/src $HOME/.spice/bin/ai
+          cp spiceai/cmd/spice/spice $HOME/.spice/bin/
+          chmod +x $HOME/.spice/bin/spice
+          echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
+
+      - name: start Spice.ai runtime
+        run: |
+          spice run &
+
+      - name: wait for Spice.ai runtime healthy
+        run: |
+          timeout 120 bash -c 'while [[ "$(curl -s -w 200 http://localhost:8000/health)" != "ok200" ]]; do sleep 1; done' || false
+
+      - name: fetch diagnostics
+        run: |
+          curl http://localhost:8000/api/v0.1/diagnostics
+
+      - name: get sample pod
+        run: |
+          spice add samples/gardener
+
+      - name: fetch pods
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods | jq
+
+      - name: fetch observations
+        run: |
+          curl http://localhost:8000/api/v0.1/pods/gardener/observations
+
+      - name: install python packages
+        run: |
+          pip install -r requirements.txt
+
+      - name: start gardener sample app
+        run: |
+          timeout 180 python main.py | tee gardener.out || true
+
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
+
+      - name: check output for success
+        run: |
+          grep -E "Watering" gardener.out && echo "Found successful action based on recommendation" || exit 1
 
   released-test:
     name: test gardener on latest released binaries
