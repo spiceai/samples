@@ -83,7 +83,7 @@ jobs:
 
       - name: start Spice.ai runtime
         run: |
-          spice run &
+          spice run --context metal &
 
       - name: wait for Spice.ai runtime healthy
         run: |
