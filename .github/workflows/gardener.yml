@@ -33,7 +33,6 @@ jobs:
 
       - name: Create .spice/bin
         run: |
-          echo $HOME
           mkdir -p $HOME/.spice/bin
 
       - name: Set up Go
@@ -72,12 +71,13 @@ jobs:
           python -m pip install -r requirements/production.txt
 
       - name: Ensure correct directory structure
+        working-directory: spiceai
         run: |
           mkdir -p $HOME/.spice/bin
-          cp spiceai/cmd/spiced/spiced $HOME/.spice/bin/
+          cp cmd/spiced/spiced $HOME/.spice/bin/
           chmod +x $HOME/.spice/bin/spiced
           ln -s ${{ github.workspace }}/spiceai/ai/src $HOME/.spice/bin/ai
-          cp spiceai/cmd/spice/spice $HOME/.spice/bin/
+          cp cmd/spice/spice $HOME/.spice/bin/
           chmod +x $HOME/.spice/bin/spice
           echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
 
