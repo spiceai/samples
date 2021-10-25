@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: spiceai/pkg/dashboard/build
-          key: ${{ runner.os }}-${{ hashFiles('dashboard/**') }}
+          key: ${{ runner.os }}-${{ hashFiles('spiceai/dashboard/**') }}
 
       - name: Build and copy dashboard
         if: steps.cache-dashboard.outputs.cache-hit != 'true'
@@ -112,6 +112,10 @@ jobs:
       - name: fetch observations
         run: |
           curl http://localhost:8000/api/v0.1/pods/gardener/observations
+
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation
 
       - name: install python packages
         run: |
