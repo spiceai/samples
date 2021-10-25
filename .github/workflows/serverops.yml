@@ -20,6 +20,8 @@ jobs:
   serverops:
     name: serverops> ${{ matrix.display_name }}
     runs-on: ubuntu-latest
+    env:
+      GOVER: 1.17
 
     strategy:
       fail-fast: false

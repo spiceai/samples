@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOVER: 1.17
-      GARDENER_SPICEPOD_VERSION: 0.3.0
 
     strategy:
       fail-fast: false
