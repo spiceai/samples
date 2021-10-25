@@ -8,7 +8,7 @@ on:
     branches:
       - trunk
   schedule:
-    - cron: '19 18 * * 4'
+    - cron: "19 18 * * 4"
   workflow_dispatch:
 
 defaults:
@@ -17,20 +17,41 @@ defaults:
     working-directory: serverops
 
 jobs:
-  test:
-    name: test serverops
+  serverops:
+    name: serverops> ${{ matrix.display_name }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [released, edge]
+        include:
+          - version: released
+            context: docker
+            spicepod_version: latest
+            display_name: https://install.spiceai.org
+          - version: edge
+            context: metal
+            spicepod_version: 0.2.0
+            display_name: spiceai/spiceai@trunk
+
     steps:
       - uses: actions/checkout@v2
 
       - name: bring up influxdb/telegraf
         run: docker-compose up -d
 
+      - name: install Spice.ai (edge, metal)
+        if: matrix.version == 'edge'
+        uses: ./.github/actions/install-edge-metal
+
       - name: update PATH
+        if: matrix.version == 'released'
         run: |
           echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
 
-      - name: install Spice.ai
+      - name: install Spice.ai (https://install.spiceai.org)
+        if: matrix.version == 'released'
         run: |
           curl https://install.spiceai.org | /bin/bash
 
@@ -39,10 +60,10 @@ jobs:
           sleep 30
           curl http://localhost:8086
 
-      - name: spice run
+      - name: start Spice.ai runtime (context ${{ matrix.context }})
         run: |
           source set-spice-vars.sh
-          spice run &
+          spice run --context ${{ matrix.context }} &
 
       - name: wait for Spice.ai runtime healthy
         run: |
@@ -52,14 +73,20 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: get sample pod
+      - name: spice add samples/serverops@${{ matrix.spicepod_version }}
+        if: matrix.spicepod_version != 'latest'
+        run: |
+          spice add samples/serverops@${{ matrix.spicepod_version }}
+
+      - name: spice add samples/serverops
+        if: matrix.spicepod_version == 'latest'
         run: |
           spice add samples/serverops
 
       - name: fetch pods
         run: |
           curl -s http://localhost:8000/api/v0.1/pods | jq
-      
+
       - name: fetch observations
         run: |
           curl http://localhost:8000/api/v0.1/pods/serverops/observations
@@ -67,7 +94,7 @@ jobs:
       - name: start serverops sample app
         run: |
           timeout 60 pwsh serverops.ps1 | tee serverops.out || true
-      
+
       - name: fetch recommendations
         run: |
           curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
