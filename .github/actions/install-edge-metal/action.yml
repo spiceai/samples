@@ -1,0 +1,67 @@
+name: "Setup Spice.ai edge with metal"
+description: "Builds Spice.ai from trunk and sets up the metal context"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: spiceai/spiceai
+        path: spiceai
+
+    - name: Create .spice/bin
+      run: |
+        mkdir -p $HOME/.spice/bin
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.GOVER }}
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Cache dashboard
+      id: cache-dashboard
+      uses: actions/cache@v2
+      with:
+        path: spiceai/pkg/dashboard/build
+        key: ${{ runner.os }}-${{ hashFiles('spiceai/dashboard/**') }}
+
+    - name: Build and copy dashboard
+      if: steps.cache-dashboard.outputs.cache-hit != 'true'
+      run: make
+      working-directory: spiceai/dashboard
+
+    - name: Build spice
+      run: make
+      working-directory: spiceai/cmd/spice
+
+    - name: Build spiced
+      run: make
+      working-directory: spiceai/cmd/spiced
+
+    - name: Cache PIP
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ hashFiles('spiceai/ai/src/requirements/production.txt') }}
+
+    - name: Install requirements
+      working-directory: spiceai/ai/src
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install -r requirements/production.txt
+
+    - name: Ensure correct directory structure
+      working-directory: spiceai
+      run: |
+        mkdir -p $HOME/.spice/bin
+        cp cmd/spiced/spiced $HOME/.spice/bin/
+        chmod +x $HOME/.spice/bin/spiced
+        ln -s ${{ github.workspace }}/spiceai/ai/src $HOME/.spice/bin/ai
+        cp cmd/spice/spice $HOME/.spice/bin/
+        chmod +x $HOME/.spice/bin/spice
+        echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
