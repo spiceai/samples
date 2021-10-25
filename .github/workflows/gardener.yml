@@ -13,7 +13,6 @@ on:
 
 defaults:
   run:
-    shell: bash
     working-directory: gardener
 
 jobs:
