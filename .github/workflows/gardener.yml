@@ -32,7 +32,7 @@ jobs:
       - name: Create $HOME/.spice/bin
         run: |
           echo $HOME
-          cat $GITHUB_ENV
+          echo $GITHUB_ENV
 
       - name: Set up Go
         uses: actions/setup-go@v2
