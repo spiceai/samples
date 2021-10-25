@@ -77,10 +77,5 @@ runs:
       shell: bash
       working-directory: spiceai
       run: |
-        mkdir -p $HOME/.spice/bin
-        cp cmd/spiced/spiced $HOME/.spice/bin/
-        chmod +x $HOME/.spice/bin/spiced
-        ln -s ${{ github.workspace }}/spiceai/ai/src $HOME/.spice/bin/ai
-        cp cmd/spice/spice $HOME/.spice/bin/
-        chmod +x $HOME/.spice/bin/spice
+        make metal-symlinks
         echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
