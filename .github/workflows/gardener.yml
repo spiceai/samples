@@ -78,7 +78,6 @@ jobs:
 
   released-test:
     name: gardener> https://install.spiceai.org
-    if: false
     runs-on: ubuntu-latest
 
     steps:
