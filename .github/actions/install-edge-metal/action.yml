@@ -30,10 +30,24 @@ runs:
         path: spiceai/pkg/dashboard/build
         key: ${{ runner.os }}-${{ hashFiles('spiceai/dashboard/**') }}
 
+    #- name: Build and copy dashboard
+    #  if: steps.cache-dashboard.outputs.cache-hit != 'true'
+    #  shell: bash
+    #  run: make
+    #  working-directory: spiceai/dashboard
+
+    # GitHub Actions does not support conditionals in composite actions yet: https://github.com/actions/runner/issues/834
+    # Using a shell workaround for now, once conditionals are supported remove the following block and uncomment the above block.
     - name: Build and copy dashboard
       if: steps.cache-dashboard.outputs.cache-hit != 'true'
       shell: bash
-      run: make
+      run: |
+        if echo ${{ steps.cache-venv.outputs.cache-hit }} | grep -c "true"
+        then
+          echo "Cache hit - skipping dependency installation"
+        else
+          make
+        fi
       working-directory: spiceai/dashboard
 
     - name: Build spice
