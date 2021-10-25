@@ -31,8 +31,10 @@ jobs:
         include:
           - version: released
             context: docker
+            spicepod_version: latest
           - version: edge
             context: metal
+            spicepod_version: 0.3.0
 
     steps:
       - uses: actions/checkout@v2
@@ -65,7 +67,7 @@ jobs:
 
       - name: get sample pod (and start training)
         run: |
-          spice add samples/gardener@$GARDENER_SPICEPOD_VERSION
+          spice add samples/gardener@${{ matrix.spicepod_version }}
 
       - name: fetch pods
         run: |
