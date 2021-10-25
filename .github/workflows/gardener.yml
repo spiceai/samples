@@ -28,6 +28,11 @@ jobs:
       fail-fast: false
       matrix:
         version: [released, edge]
+        include:
+          - version: released
+            context: docker
+          - version: edge
+            context: metal
 
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +53,7 @@ jobs:
 
       - name: start Spice.ai runtime
         run: |
-          spice run --context metal &
+          spice run --context ${{ matrix.context }} &
 
       - name: wait for Spice.ai runtime healthy
         run: |
