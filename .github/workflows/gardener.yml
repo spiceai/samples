@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GOVER: 1.17
+      GARDENER_SPICEPOD_VERSION: 0.3.0
 
     steps:
       - uses: actions/checkout@v2
@@ -101,9 +102,9 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: get sample pod
+      - name: get sample pod (and start training)
         run: |
-          spice add samples/gardener@0.3.0
+          spice add samples/gardener@$GARDENER_SPICEPOD_VERSION
 
       - name: fetch pods
         run: |
