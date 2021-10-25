@@ -39,7 +39,6 @@ runs:
     # GitHub Actions does not support conditionals in composite actions yet: https://github.com/actions/runner/issues/834
     # Using a shell workaround for now, once conditionals are supported remove the following block and uncomment the above block.
     - name: Build and copy dashboard
-      if: steps.cache-dashboard.outputs.cache-hit != 'true'
       shell: bash
       run: |
         if echo ${{ steps.cache-venv.outputs.cache-hit }} | grep -c "true"
