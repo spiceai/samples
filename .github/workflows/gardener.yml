@@ -32,11 +32,11 @@ jobs:
           - version: released
             context: docker
             spicepod_version: latest
-            display_name: spiceai/spiceai@trunk
+            display_name: https://install.spiceai.org
           - version: edge
             context: metal
             spicepod_version: 0.3.0
-            display_name: https://install.spiceai.org
+            display_name: spiceai/spiceai@trunk
 
     steps:
       - uses: actions/checkout@v2
@@ -50,12 +50,12 @@ jobs:
         run: |
           echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
 
-      - name: install Spice.ai
+      - name: install Spice.ai (https://install.spiceai.org)
         if: matrix.version == 'released'
         run: |
           curl https://install.spiceai.org | /bin/bash
 
-      - name: start Spice.ai runtime
+      - name: start Spice.ai runtime (context ${{ matrix.context }})
         run: |
           spice run --context ${{ matrix.context }} &
 
@@ -67,12 +67,12 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: get sample pod (and start training)
+      - name: spice add samples/gardener@${{ matrix.spicepod_version }}
         if: matrix.spicepod_version != 'latest'
         run: |
           spice add samples/gardener@${{ matrix.spicepod_version }}
 
-      - name: get sample pod (and start training)
+      - name: spice add samples/gardener
         if: matrix.spicepod_version == 'latest'
         run: |
           spice add samples/gardener
