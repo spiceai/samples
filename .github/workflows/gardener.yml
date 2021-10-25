@@ -124,7 +124,7 @@ jobs:
 
       - name: start gardener sample app
         run: |
-          timeout 30 python main.py | tee gardener.out || true
+          timeout 60 python main.py | tee gardener.out || true
 
       - name: fetch recommendations
         run: |
