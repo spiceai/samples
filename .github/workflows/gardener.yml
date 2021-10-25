@@ -94,7 +94,7 @@ jobs:
 
       - name: start gardener sample app
         run: |
-          python main.py --timeout-secs 180 | tee gardener.out
+          timeout 180 python main.py | tee gardener.out
 
       - name: fetch recommendations
         run: |

@@ -3,7 +3,6 @@ import io
 import time
 import csv
 import requests
-import argparse
 
 from garden import Garden
 
@@ -14,27 +13,19 @@ SPICE_AI_RECOMMENDATION_URL = (
     "http://localhost:8000/api/v0.1/pods/gardener/recommendation"
 )
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--timeout-secs", type=int)
 
-
-def maintain_garden_moisture_content(garden, timeout_secs):
-    start_time = time.time()
+def maintain_garden_moisture_content(garden):
     while True:
         print(
             f"Time (s): {garden.get_time_unix_seconds()} Temperature (C): {round(garden.get_temperature(),3)} Moisture (%): {round(garden.get_moisture(),3)}"
         )
 
-        current_time = time.time()
-        if current_time > start_time + timeout_secs:
-            print("Timeout reached, exiting...")
-            return
-
         # Post observations to Spice.ai
         #
-        # Spice.ai's observations endpoint accepts CSV formatted data
+        # Spice.ai's observations endpoint accepts CSV or JSON formatted data.
+        # In this sample we will use CSV formatted data.
         # It expects headers of the form <dataspace from>.<dataspace name>.<dataspace field>
-        # A "time" column must be included with all observations
+        # A "time" column must be included with all observations.
         #
         # For more information on the observations endpoint, visit https://docs.spiceai.org/reference/api/#observations
         output = io.StringIO()
@@ -55,8 +46,7 @@ def maintain_garden_moisture_content(garden, timeout_secs):
 
         try:
             requests.post(SPICE_AI_OBSERVATIONS_URL, data=output.getvalue())
-        except Exception as e:
-            print(e)
+        except Exception:
             print(
                 f"Failed to post observations to Spice.ai.  Is the runtime started ('spice run')?"
             )
@@ -73,8 +63,7 @@ def maintain_garden_moisture_content(garden, timeout_secs):
             response = requests.get(SPICE_AI_RECOMMENDATION_URL)
             response_json = response.json()
             recommended_action = response_json["action"]
-        except Exception as e:
-            print(e)
+        except Exception:
             print(
                 f"Failed to get a recommendation from Spice.ai.  Is the runtime started ('spice run')?"
             )
@@ -83,10 +72,10 @@ def maintain_garden_moisture_content(garden, timeout_secs):
         # Take action based on Spice.ai's recommendation
         if recommended_action == "open_valve_full":
             garden.open_valve_full()
-            print("Watering at full flow")
+            print("Watering at full flow", flush=True)
         elif recommended_action == "open_valve_half":
             garden.open_valve_half()
-            print("Watering at half flow")
+            print("Watering at half flow", flush=True)
         else:
             pass
 
@@ -112,7 +101,5 @@ def create_garden_from_csv(csv_path):
 
 
 if __name__ == "__main__":
-    args = parser.parse_args()
-    print(args)
     garden = create_garden_from_csv(GARDEN_DATA_CSV_PATH)
-    maintain_garden_moisture_content(garden, args.timeout_secs)
+    maintain_garden_moisture_content(garden)
