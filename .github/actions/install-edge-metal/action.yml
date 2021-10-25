@@ -9,6 +9,7 @@ runs:
         path: spiceai
 
     - name: Create .spice/bin
+      shell: bash
       run: |
         mkdir -p $HOME/.spice/bin
 
@@ -31,14 +32,17 @@ runs:
 
     - name: Build and copy dashboard
       if: steps.cache-dashboard.outputs.cache-hit != 'true'
+      shell: bash
       run: make
       working-directory: spiceai/dashboard
 
     - name: Build spice
+      shell: bash
       run: make
       working-directory: spiceai/cmd/spice
 
     - name: Build spiced
+      shell: bash
       run: make
       working-directory: spiceai/cmd/spiced
 
@@ -49,6 +53,7 @@ runs:
         key: ${{ runner.os }}-${{ hashFiles('spiceai/ai/src/requirements/production.txt') }}
 
     - name: Install requirements
+      shell: bash
       working-directory: spiceai/ai/src
       run: |
         python -m venv venv
@@ -56,6 +61,7 @@ runs:
         python -m pip install -r requirements/production.txt
 
     - name: Ensure correct directory structure
+      shell: bash
       working-directory: spiceai
       run: |
         mkdir -p $HOME/.spice/bin
