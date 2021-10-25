@@ -1,0 +1,81 @@
+name: "Setup Spice.ai edge with metal"
+description: "Builds Spice.ai from trunk and sets up the metal context"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: spiceai/spiceai
+        path: spiceai
+
+    - name: Create .spice/bin
+      shell: bash
+      run: |
+        mkdir -p $HOME/.spice/bin
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.GOVER }}
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Cache dashboard
+      id: cache-dashboard
+      uses: actions/cache@v2
+      with:
+        path: spiceai/pkg/dashboard/build
+        key: ${{ runner.os }}-${{ hashFiles('spiceai/dashboard/**') }}
+
+    #- name: Build and copy dashboard
+    #  if: steps.cache-dashboard.outputs.cache-hit != 'true'
+    #  shell: bash
+    #  run: make
+    #  working-directory: spiceai/dashboard
+
+    # GitHub Actions does not support conditionals in composite actions yet: https://github.com/actions/runner/issues/834
+    # Using a shell workaround for now, once conditionals are supported remove the following block and uncomment the above block.
+    - name: Build and copy dashboard
+      shell: bash
+      run: |
+        if echo ${{ steps.cache-dashboard.outputs.cache-hit }} | grep -c "true"
+        then
+          echo "Cache hit - skipping dependency installation"
+        else
+          make
+        fi
+      working-directory: spiceai/dashboard
+
+    - name: Build spice
+      shell: bash
+      run: make
+      working-directory: spiceai/cmd/spice
+
+    - name: Build spiced
+      shell: bash
+      run: make
+      working-directory: spiceai/cmd/spiced
+
+    - name: Cache PIP
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-${{ hashFiles('spiceai/ai/src/requirements/production.txt') }}
+
+    - name: Install requirements
+      shell: bash
+      working-directory: spiceai/ai/src
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install -r requirements/production.txt
+
+    - name: Ensure correct directory structure
+      shell: bash
+      working-directory: spiceai
+      run: |
+        make metal-symlinks
+        echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV

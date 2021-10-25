@@ -22,9 +22,10 @@ def maintain_garden_moisture_content(garden):
 
         # Post observations to Spice.ai
         #
-        # Spice.ai's observations endpoint accepts CSV formatted data
+        # Spice.ai's observations endpoint accepts CSV or JSON formatted data.
+        # In this sample we will use CSV formatted data.
         # It expects headers of the form <dataspace from>.<dataspace name>.<dataspace field>
-        # A "time" column must be included with all observations
+        # A "time" column must be included with all observations.
         #
         # For more information on the observations endpoint, visit https://docs.spiceai.org/reference/api/#observations
         output = io.StringIO()
@@ -71,10 +72,10 @@ def maintain_garden_moisture_content(garden):
         # Take action based on Spice.ai's recommendation
         if recommended_action == "open_valve_full":
             garden.open_valve_full()
-            print("Watering at full flow")
+            print("Watering at full flow", flush=True)
         elif recommended_action == "open_valve_half":
             garden.open_valve_half()
-            print("Watering at half flow")
+            print("Watering at half flow", flush=True)
         else:
             pass
 

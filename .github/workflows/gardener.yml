@@ -4,11 +4,15 @@ on:
   push:
     branches:
       - trunk
+    paths:
+      - "gardener/**"
   pull_request:
     branches:
       - trunk
+    paths:
+      - "gardener/**"
   schedule:
-    - cron: '19 18 * * 4'
+    - cron: "19 18 * * 4"
   workflow_dispatch:
 
 defaults:
@@ -17,24 +21,46 @@ defaults:
     working-directory: gardener
 
 jobs:
-  test:
-    name: test gardener
+  gardener:
+    name: gardener> ${{ matrix.display_name }}
     runs-on: ubuntu-latest
-    
+    env:
+      GOVER: 1.17
+
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [released, edge]
+        include:
+          - version: released
+            context: docker
+            spicepod_version: latest
+            display_name: https://install.spiceai.org
+          - version: edge
+            context: metal
+            spicepod_version: 0.3.0
+            display_name: spiceai/spiceai@trunk
+
     steps:
       - uses: actions/checkout@v2
 
+      - name: install Spice.ai (edge, metal)
+        if: matrix.version == 'edge'
+        uses: ./.github/actions/install-edge-metal
+
       - name: update PATH
+        if: matrix.version == 'released'
         run: |
           echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
 
-      - name: install Spice.ai
+      - name: install Spice.ai (https://install.spiceai.org)
+        if: matrix.version == 'released'
         run: |
           curl https://install.spiceai.org | /bin/bash
 
-      - name: start Spice.ai runtime
+      - name: start Spice.ai runtime (context ${{ matrix.context }})
         run: |
-          spice run &
+          spice run --context ${{ matrix.context }} &
 
       - name: wait for Spice.ai runtime healthy
         run: |
@@ -44,17 +70,27 @@ jobs:
         run: |
           curl http://localhost:8000/api/v0.1/diagnostics
 
-      - name: get sample pod
+      - name: spice add samples/gardener@${{ matrix.spicepod_version }}
+        if: matrix.spicepod_version != 'latest'
+        run: |
+          spice add samples/gardener@${{ matrix.spicepod_version }}
+
+      - name: spice add samples/gardener
+        if: matrix.spicepod_version == 'latest'
         run: |
           spice add samples/gardener
 
       - name: fetch pods
         run: |
           curl -s http://localhost:8000/api/v0.1/pods | jq
-      
+
       - name: fetch observations
         run: |
           curl http://localhost:8000/api/v0.1/pods/gardener/observations
+
+      - name: fetch recommendations
+        run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation
 
       - name: install python packages
         run: |
@@ -66,8 +102,10 @@ jobs:
 
       - name: fetch recommendations
         run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation
           curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
 
       - name: check output for success
         run: |
+          cat gardener.out
           grep -E "Watering" gardener.out && echo "Found successful action based on recommendation" || exit 1
