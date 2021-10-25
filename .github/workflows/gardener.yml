@@ -67,11 +67,17 @@ jobs:
       - name: Ensure correct directory structure
         run: |
           mkdir -p $HOME/.spice/bin
+          echo "1"
           cp spiceai/cmd/spiced/spiced $HOME/.spice/bin/
+          echo "2"
           chmod +x $HOME/.spice/bin/spiced
+          echo "3"
           ln -s ${{ github.workspace }}/spiceai/ai/src $HOME/.spice/bin/ai
+          echo "4"
           cp spiceai/cmd/spice/spice $HOME/.spice/bin/
+          echo "5"
           chmod +x $HOME/.spice/bin/spice
+          echo "6"
           echo "PATH=~/.spice/bin:$PATH" >> $GITHUB_ENV
 
       - name: start Spice.ai runtime
