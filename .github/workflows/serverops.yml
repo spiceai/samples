@@ -60,7 +60,7 @@ jobs:
       - name: wait for influxdb start and metrics collection
         run: |
           sleep 30
-          curl http://localhost:8086
+          curl -s http://localhost:8086
 
       - name: start Spice.ai runtime (context ${{ matrix.context }})
         run: |
@@ -73,7 +73,7 @@ jobs:
 
       - name: fetch diagnostics
         run: |
-          curl http://localhost:8000/api/v0.1/diagnostics
+          curl -s http://localhost:8000/api/v0.1/diagnostics
 
       - name: spice add samples/serverops@${{ matrix.spicepod_version }}
         if: matrix.spicepod_version != 'latest'
@@ -91,11 +91,11 @@ jobs:
 
       - name: fetch observations
         run: |
-          curl http://localhost:8000/api/v0.1/pods/serverops/observations
+          curl -s http://localhost:8000/api/v0.1/pods/serverops/observations
 
       - name: fetch recommendation
         run: |
-          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation
+          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | jq
 
       - name: start serverops sample app
         run: |
@@ -103,7 +103,7 @@ jobs:
 
       - name: fetch recommendations
         run: |
-          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation
+          curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | jq
           curl -s http://localhost:8000/api/v0.1/pods/serverops/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
 
       - name: check output for success
