@@ -95,7 +95,7 @@ jobs:
 
       - name: get sample pod
         run: |
-          spice add samples/gardener
+          spice add samples/gardener@0.3.0
 
       - name: fetch pods
         run: |
