@@ -32,6 +32,7 @@ jobs:
       - name: Create $HOME/.spice/bin
         run: |
           echo $HOME
+          cat $GITHUB_ENV
           mkdir -p $HOME/.spice/bin
 
       - name: Set up Go
