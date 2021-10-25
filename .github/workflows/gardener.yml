@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - trunk
+    paths:
+      - "gardener/**"
   pull_request:
     branches:
       - trunk
+    paths:
+      - "gardener/**"
   schedule:
     - cron: "19 18 * * 4"
   workflow_dispatch:
