@@ -27,7 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/install-edge-metal
+      - name: install Spice.ai (edge, metal)
+        uses: ./.github/actions/install-edge-metal
 
       - name: start Spice.ai runtime
         run: |

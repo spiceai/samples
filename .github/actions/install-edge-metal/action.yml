@@ -41,7 +41,7 @@ runs:
     - name: Build and copy dashboard
       shell: bash
       run: |
-        if echo ${{ steps.cache-venv.outputs.cache-hit }} | grep -c "true"
+        if echo ${{ steps.cache-dashboard.outputs.cache-hit }} | grep -c "true"
         then
           echo "Cache hit - skipping dependency installation"
         else
