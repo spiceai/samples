@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   edge-test:
-    name: test gardener on trunk build
+    name: gardener> spiceai/spiceai@trunk
     runs-on: ubuntu-latest
     env:
       GOVER: 1.17
@@ -28,6 +28,11 @@ jobs:
         with:
           repository: spiceai/spiceai
           path: spiceai
+
+      - name: Create $HOME/.spice/bin
+        run: |
+          echo $HOME
+          mkdir -p $HOME/.spice/bin
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -121,7 +126,7 @@ jobs:
           grep -E "Watering" gardener.out && echo "Found successful action based on recommendation" || exit 1
 
   released-test:
-    name: test gardener on latest released binaries
+    name: gardener> https://install.spiceai.org
     if: false
     runs-on: ubuntu-latest
 
