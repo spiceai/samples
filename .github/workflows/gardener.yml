@@ -45,11 +45,11 @@ jobs:
 
       - name: Build spice
         run: make
-        working-directory: cmd/spice
+        working-directory: spiceai/cmd/spice
 
       - name: Build spiced
         run: make
-        working-directory: cmd/spiced
+        working-directory: spiceai/cmd/spiced
 
       - name: Cache PIP
         uses: actions/cache@v2
