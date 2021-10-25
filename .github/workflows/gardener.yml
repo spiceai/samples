@@ -124,10 +124,11 @@ jobs:
 
       - name: start gardener sample app
         run: |
-          python main.py --timeout-secs 30 | tee gardener.out
+          python main.py --timeout-secs 60 | tee gardener.out
 
       - name: fetch recommendations
         run: |
+          curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation
           curl -s http://localhost:8000/api/v0.1/pods/gardener/recommendation | grep -E "confidence" && echo "Fetched recommendation from trained model" || exit 1
 
       - name: check output for success
