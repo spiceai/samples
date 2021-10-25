@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   gardener:
-    name: gardener> ${{ matrix.version }}
+    name: gardener> ${{ matrix.display_name }}
     runs-on: ubuntu-latest
     env:
       GOVER: 1.17
@@ -32,9 +32,11 @@ jobs:
           - version: released
             context: docker
             spicepod_version: latest
+            display_name: spiceai/spiceai@trunk
           - version: edge
             context: metal
             spicepod_version: 0.3.0
+            display_name: https://install.spiceai.org
 
     steps:
       - uses: actions/checkout@v2
@@ -66,8 +68,14 @@ jobs:
           curl http://localhost:8000/api/v0.1/diagnostics
 
       - name: get sample pod (and start training)
+        if: matrix.spicepod_version != 'latest'
         run: |
           spice add samples/gardener@${{ matrix.spicepod_version }}
+
+      - name: get sample pod (and start training)
+        if: matrix.spicepod_version == 'latest'
+        run: |
+          spice add samples/gardener
 
       - name: fetch pods
         run: |
