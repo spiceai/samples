@@ -3,6 +3,7 @@ import io
 import time
 import csv
 import requests
+import argparse
 
 from garden import Garden
 
@@ -13,12 +14,21 @@ SPICE_AI_RECOMMENDATION_URL = (
     "http://localhost:8000/api/v0.1/pods/gardener/recommendation"
 )
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--timeout-secs", type=int)
 
-def maintain_garden_moisture_content(garden):
+
+def maintain_garden_moisture_content(garden, timeout_secs):
+    start_time = time.time()
     while True:
         print(
             f"Time (s): {garden.get_time_unix_seconds()} Temperature (C): {round(garden.get_temperature(),3)} Moisture (%): {round(garden.get_moisture(),3)}"
         )
+
+        current_time = time.time()
+        if current_time > start_time + timeout_secs:
+            print("Timeout reached, exiting...")
+            return
 
         # Post observations to Spice.ai
         #
@@ -45,7 +55,8 @@ def maintain_garden_moisture_content(garden):
 
         try:
             requests.post(SPICE_AI_OBSERVATIONS_URL, data=output.getvalue())
-        except Exception:
+        except Exception as e:
+            print(e)
             print(
                 f"Failed to post observations to Spice.ai.  Is the runtime started ('spice run')?"
             )
@@ -62,7 +73,8 @@ def maintain_garden_moisture_content(garden):
             response = requests.get(SPICE_AI_RECOMMENDATION_URL)
             response_json = response.json()
             recommended_action = response_json["action"]
-        except Exception:
+        except Exception as e:
+            print(e)
             print(
                 f"Failed to get a recommendation from Spice.ai.  Is the runtime started ('spice run')?"
             )
@@ -100,5 +112,7 @@ def create_garden_from_csv(csv_path):
 
 
 if __name__ == "__main__":
+    args = parser.parse_args()
+    print(args)
     garden = create_garden_from_csv(GARDEN_DATA_CSV_PATH)
-    maintain_garden_moisture_content(garden)
+    maintain_garden_moisture_content(garden, args.timeout_secs)
