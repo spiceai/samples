@@ -57,7 +57,7 @@ The application will attempt to fetch a recommendation from the Spice.ai runtime
 
 ## Get the sample pod
 
-In the new terminal add the Trader samplex pod from [spicerack.org](https://spicerack.org):
+In the new terminal add the Trader sample pod from [spicerack.org](https://spicerack.org):
 
 ```bash
 spice add samples/trader
