@@ -8,7 +8,7 @@ on:
     branches:
       - trunk
   schedule:
-    - cron: '19 18 * * 4'
+    - cron: "19 18 * * 4"
   workflow_dispatch:
 
 defaults:
@@ -17,10 +17,32 @@ defaults:
     working-directory: gardener
 
 jobs:
-  test:
-    name: test gardener
+  edge-test:
+    name: test gardener on trunk build
     runs-on: ubuntu-latest
-    
+    env:
+      GOVER: 1.17
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: spiceai/spiceai
+          path: ./spiceai
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GOVER }}
+
+      - name: Build and copy dashboard
+        working-directory: dashboard
+        run: make
+
+  released-test:
+    name: test gardener on latest released binaries
+    if: false
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
 
@@ -51,7 +73,7 @@ jobs:
       - name: fetch pods
         run: |
           curl -s http://localhost:8000/api/v0.1/pods | jq
-      
+
       - name: fetch observations
         run: |
           curl http://localhost:8000/api/v0.1/pods/gardener/observations
