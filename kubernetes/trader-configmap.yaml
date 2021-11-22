@@ -13,7 +13,7 @@ data:
     dataspaces:
       - from: local
         name: portfolio
-        fields:
+        measurements:
           - name: usd_balance
             type: number
             initializer: 1000000
@@ -39,7 +39,7 @@ data:
               path: btcusd.csv
           processor:
             name: csv
-        fields:
+        measurements:
           - name: close
     actions:
       - name: buy
@@ -69,7 +69,7 @@ data:
             reward = -change_in_price
         - reward: hold
           with: reward = 1
-    
+
   btcusd.csv: |
     time,open,high,low,close,volume
     1605312000,16339.56,16339.6,16240,16254.51,274.42607
@@ -1515,4 +1515,3 @@ data:
     1607904000,19166.65,19166.65,19045.23,19083.66,204.410282
     1607905800,19085.48,19105.09,18967.68,19049.02,256.1607271
     1607907600,19048.73,19098.16,19008.36,19093,195.5981763
-    
