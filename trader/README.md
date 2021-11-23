@@ -116,6 +116,14 @@ You can also view observation data by fetching it with an API call:
 curl http://localhost:8000/api/v0.1/pods/trader/observations
 ```
 
+## Rewards
+
+The trader sample uses a **rewards function file** to host action rewards which is located at `spicepods/rewards.py`.
+
+Try tweaking the rewards Python code and observing the effect on training.
+
+Learn more about rewards and reward function files in the [documentation](https://docs.spiceai.org/concepts/rewards/external/).
+
 ## Next steps
 
 Congratulations! You've successfully trained a model that provides real-time recommendations for trades based on live market data and your portfolio constraints!
