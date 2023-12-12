@@ -11,7 +11,7 @@ class TrainParams:
     metadata: Optional[dict]
     runtime: str
     compiled_package_cid: str
-    entry_point: str
+    train_handler: str
 
 @dataclass
 class TrainResponse:
