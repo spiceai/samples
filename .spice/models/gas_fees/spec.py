@@ -36,7 +36,7 @@ class InferenceParams:
     compiled_package_cid: str
     inference_handler: str
     metadata: Optional[dict] = None
-    model_id: str = ""
+    job_id: str = ""
     model_type: str = ""
 
 @dataclass
