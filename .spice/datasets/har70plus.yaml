@@ -1,0 +1,8 @@
+name: spiceai.samples.har70_plus
+type: view
+migrations:
+  - name: create_view
+    sql: |
+      CREATE OR REPLACE VIEW spiceai.samples.har70_plus AS (
+        SELECT "timestamp", back_x, back_y, back_z, thigh_x, thigh_y, thigh_z, label FROM testmluploads.samples."har70plus.csv" limit 50
+      )
