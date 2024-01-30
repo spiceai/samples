@@ -1,29 +1,36 @@
 family: tf_uniswapv3_wbtc_eth
 name: v0.0.1
-model_type: tf_uniswapv3_wbtc_eth_aggregated
-training_query: |
-  SELECT
+type: tf_uniswapv3_wbtc_eth_aggregated
+
+epochs: 10
+
+training:
+  sql: |
+    SELECT
+        block_timestamp as ts,
+        CASE 
+            WHEN abs(cast(amount0 as double) * POWER(10, 8)) = 0 THEN NULL
+            ELSE abs(cast(amount1 as double)/ POWER(10, 18) / NULLIF(abs(cast(amount0 as double)/ POWER(10, 8)), 0))
+        END as y
+    FROM eth.uniswap_v3.event_swaps
+    WHERE address = '0x4585fe77225b41b697c938b018e2ac67ac5a20c0'
+    ORDER BY block_number desc
+    LIMIT 1000
+
+inferencing:
+  sql: |
+    SELECT
       block_timestamp as ts,
       CASE 
           WHEN abs(cast(amount0 as double) * POWER(10, 8)) = 0 THEN NULL
           ELSE abs(cast(amount1 as double)/ POWER(10, 18) / NULLIF(abs(cast(amount0 as double)/ POWER(10, 8)), 0))
       END as y
-  FROM eth.uniswap_v3.event_swaps
-  WHERE address = '0x4585fe77225b41b697c938b018e2ac67ac5a20c0'
-  ORDER BY block_number desc
-  LIMIT 1000
-inference_query: |
-  SELECT
-    block_timestamp as ts,
-    CASE 
-        WHEN abs(cast(amount0 as double) * POWER(10, 8)) = 0 THEN NULL
-        ELSE abs(cast(amount1 as double)/ POWER(10, 18) / NULLIF(abs(cast(amount0 as double)/ POWER(10, 8)), 0))
-    END as y
-  FROM eth.uniswap_v3.event_swaps
-  WHERE address = '0x4585fe77225b41b697c938b018e2ac67ac5a20c0'
-  ORDER BY block_number desc
-  LIMIT 100
-lookback_size: 50
-forecast_size: 1
+    FROM eth.uniswap_v3.event_swaps
+    WHERE address = '0x4585fe77225b41b697c938b018e2ac67ac5a20c0'
+    ORDER BY block_number desc
+    LIMIT 100
+  lookback_size: 50
+  forecast_size: 1
+
 metadata:
   aggregate: true

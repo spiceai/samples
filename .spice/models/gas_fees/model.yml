@@ -1,10 +1,38 @@
 family: gas_fees
-name: v0.1
-model_type: xgb_gasfees
-training_query: 'WITH counts AS (    SELECT block_number, count(1) as "count" FROM eth.transactions GROUP BY block_number  )  SELECT number as "ts", CAST(b.base_fee_per_gas / 1000000000.0 AS DOUBLE) as "y", CAST(c."count" AS DOUBLE) as "covariate"  FROM eth.blocks b  INNER JOIN counts c ON b.number = c.block_number  WHERE b.base_fee_per_gas IS NOT NULL ORDER BY block_number DESC LIMIT 500'
-inference_query: 'SELECT number as "ts", CAST(base_fee_per_gas / 1000000000.0 AS DOUBLE) as "y", CAST(transaction_count AS DOUBLE) as "y2" from eth.recent_blocks WHERE base_fee_per_gas IS NOT NULL ORDER BY ts DESC LIMIT 35'
-lookback_size: 30
-forecast_size: 1
+name: v2
+type: xgb_gasfees
+
+epochs: 10
+
+training:
+  sql: |
+    WITH counts AS (
+      SELECT block_number, count(1) as "count" FROM eth.transactions GROUP BY block_number
+    )
+    SELECT
+      number as "ts",
+      CAST(b.base_fee_per_gas / 1000000000.0 AS DOUBLE) as "y",
+      CAST(c."count" AS DOUBLE) as "covariate"
+    FROM eth.blocks b
+    INNER JOIN counts c ON b.number = c.block_number
+    WHERE b.base_fee_per_gas IS NOT NULL
+    ORDER BY block_number DESC
+    LIMIT 500
+
+inferencing:
+  sql: |
+    SELECT
+      number as "ts",
+      CAST(base_fee_per_gas / 1000000000.0 AS DOUBLE) as "y",
+      CAST(transaction_count AS DOUBLE) as "y2"
+    FROM eth.recent_blocks
+    WHERE base_fee_per_gas IS NOT NULL
+    ORDER BY ts DESC
+    LIMIT 35
+
+  lookback_size: 30
+  forecast_size: 1
+
 metadata:
-  firecache: false
+  firecache: true
   covariate: true
