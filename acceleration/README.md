@@ -2,7 +2,9 @@
 
 This sample showcases the way to use spiced to simplify the process of building a CQRS pattern for your application.
 
-In this sample, we have a `/orders` API which creates a random order with a random count. 
+In this sample, we have a `/orders` API which creates a random order with a random count.
+
+The sample uses a single postgres database to receive order command and store products, in MicroServices reaility, they could be in separate database instances which make the sample even more appealing.
 
 There are 3 `/rankings` API to show the top 5 selling products:
 - /rankings - fetch data from postgres
