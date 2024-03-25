@@ -2,12 +2,11 @@
 
 Learn about Spice.ai with in-depth samples.
 
-## Apps that learn and adapt
+## Data-driven samples
 
-- [ServerOps](serverops/README.md) - Run server maintainance during periods of low load.
-- [Gardener](gardener/README.md) - Intelligently water a simulated garden.
-- [Trader](trader/README.md) - Bitcoin trading from Coinbase Pro exchange data.
+- [Sales BI Dashboard](sales-bi/README.md)
+- [Local Materialization and Acceleration CQRS](acceleration/README.md)
 
 ## Deploy Spice.ai
 
-- [Kubernetes](kubernetes/README.md) - Use Spice.ai in your Kubernetes cluster
+- Kubernetes - Sample coming soon.

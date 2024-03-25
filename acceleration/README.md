@@ -1,15 +1,16 @@
-# Sample
+# Local Materialization and Acceleration CQRS Sample
 
-This sample showcases the way to use spiced to simplify the process of building a CQRS pattern for your application.
+Use Spice.ai to simplify the process of building a high-performance [Command Query Responsibility Segregation (CQRS)](https://microservices.io/patterns/data/cqrs.html) application with local materialization and acceleration.
 
-In this sample, we have a `/orders` API which creates a random order with a random count.
+The sample application has:
 
-The sample uses a single postgres database to receive order command and store products, in MicroServices reaility, they could be in separate database instances which make the sample even more appealing.
+1. An `/orders` API to generate a random order with a random count
+2. A single PostgreSQL database to receive orders and store products.
+3. Three `/rankings` APIs to show the top 5 selling products:
 
-There are 3 `/rankings` API to show the top 5 selling products:
-- /rankings - fetch data from postgres
-- /rankings-accelerated - fetch data from spiced runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
-- /rankings-materialized - fetch data from spiced runtime with materialized ranking view, it pulls data from ranking view from the previous spiced runtime and accelerates it locally
+- `/rankings` - fetch data from postgres
+- `/rankings-accelerated` - fetch data from spiced runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
+- `/rankings-materialized` - fetch data from spiced runtime with materialized ranking view, it pulls data from ranking view from the previous spiced runtime and accelerates it locally
 
 ## How to run
 
@@ -21,6 +22,7 @@ then call the rankings API
 ## Performance benchmark using oha
 
 ### From Postgres
+
 ```bash
 …/sample-1 main ❯ oha -n20000 -c100 'http://localhost:9999/ranking'
 Summary:
