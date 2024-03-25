@@ -9,6 +9,13 @@ There are 3 `/rankings` API to show the top 5 selling products:
 - /rankings-accelerated - fetch data from spiced runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
 - /rankings-materialized - fetch data from spiced runtime with materialized ranking view, it pulls data from ranking view from the previous spiced runtime and accelerates it locally
 
+## How to run
+
+`docker-compose up --build`
+
+then call the rankings API
+`curl localhost:9999/rankings`
+
 ## Performance benchmark using oha
 
 ### From Postgres
