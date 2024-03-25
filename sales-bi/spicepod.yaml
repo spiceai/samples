@@ -1,0 +1,15 @@
+version: v1beta1
+kind: Spicepod
+name: sales-bi
+
+datasets:
+  - from: postgres:public.cleaned_sales_data
+    name: cleaned_sales_data
+    params:
+      pg_host: localhost
+      pg_db: postgres
+      pg_user: postgres
+      pg_pass: P0rsche911
+    acceleration:
+      enabled: true
+      refresh: 10s
