@@ -1,0 +1,12 @@
+version: v1beta1
+kind: Spicepod
+name: materialized
+
+datasets:
+  - from: flightsql:datafusion.public.rankings
+    name: rankings
+    params:
+      endpoint: http://spiced:50051
+    acceleration:
+      enabled: true
+      refresh: 10s
