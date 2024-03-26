@@ -14,10 +14,10 @@ The sample application has:
 
 ## How to run
 
-`docker-compose up --build`
+`make`
 
 then call the rankings API
-`curl localhost:9999/rankings`
+`curl localhost:9999/ranking`
 
 ## Performance benchmark using oha
 
@@ -168,3 +168,9 @@ Details (average, fastest, slowest):
 Status code distribution:
   [200] 20000 responses
 ```
+
+## Clean up
+
+To stop and remove the Docker containers/volumes that were created, run:
+
+`make clean`
