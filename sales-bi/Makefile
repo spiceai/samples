@@ -1,4 +1,12 @@
-all:
+.PHONY: all
+all: start import-dashboards
+
+.PHONY: import-dashboards
+import-dashboards:
+	@./superset/init/import-dashboards.sh > /dev/null
+
+.PHONY: start
+start:
 	@docker compose build
 	@docker compose up -d
 
@@ -10,6 +18,7 @@ all:
 	@echo ""
 	@echo "Superset is running at http://localhost:8088, login with admin/admin"
 
+.PHONY: clean
 clean:
 	@docker compose down
 	@docker volume prune -f

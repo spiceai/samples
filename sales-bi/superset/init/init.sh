@@ -11,7 +11,3 @@ docker exec -it $CONTAINER_NAME superset fab create-admin \
 
 docker exec -it $CONTAINER_NAME superset db upgrade
 docker exec -it $CONTAINER_NAME superset init
-
-docker exec -it $CONTAINER_NAME superset import-dashboards \
-              --path /dashboard/dashboard-sales-demo.zip \
-              --username admin
