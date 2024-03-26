@@ -12,4 +12,5 @@ datasets:
       pg_pass: postgres
     acceleration:
       enabled: true
-      refresh: 10s
+      refresh_interval: 10s
+      refresh_mode: full
