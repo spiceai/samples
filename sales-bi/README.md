@@ -40,6 +40,10 @@ Navigate to [http://localhost:8088](http://localhost:8088) to access the Apache 
 
 # TODO: Add instructions on how to load the dashboard
 
+## Spice SQL REPL
+Use the following command to access the Spice SQL REPL to explore the data in the Spice.ai runtime:
+`docker exec -it spiceai-sales-bi-demo spiced --repl`
+
 ## Clean up
 
 `docker compose down`
