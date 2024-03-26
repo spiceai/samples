@@ -6,11 +6,11 @@ The sample application has:
 
 1. An `/orders` API to generate a random order with a random count
 2. A single PostgreSQL database to receive orders and store products.
-3. Three `/rankings` APIs to show the top 5 selling products:
+3. Three `/ranking` APIs to show the top 5 selling products:
 
-- `/rankings` - fetch data from postgres
-- `/rankings-accelerated` - fetch data from spiced runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
-- `/rankings-materialized` - fetch data from spiced runtime with materialized ranking view, it pulls data from ranking view from the previous spiced runtime and accelerates it locally
+- `/ranking` - fetch data from postgres
+- `/ranking-accelerated` - fetch data from spiced runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
+- `/ranking-materialized` - fetch data from spiced runtime with materialized ranking view, it pulls data from ranking view from the previous spiced runtime and accelerates it locally
 
 ## How to run
 
