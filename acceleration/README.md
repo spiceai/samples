@@ -14,12 +14,20 @@ The sample application has:
 
 ## How to run
 
+Download sample code (if not done yet):
+```bash
+git clone https://github.com/spiceai/samples.git
+cd samples/acceleration
+```
+
 `docker-compose up --build`
 
 then call the rankings API
 `curl localhost:9999/rankings`
 
 ## Performance benchmark using oha
+
+Install [oha](https://docs.rs/crate/oha/latest)
 
 ### From Postgres
 
