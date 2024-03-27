@@ -1,5 +1,7 @@
 # Sales BI Dashboard
 
+Watch the [demo video](https://youtu.be/CTpctp6Sshg) that explains this sample or follow along with the steps below.
+
 ## Context
 
 This sample will show how to configure a BI dashboard (Apache Superset) to use Spice as the data source for sales data. The sales data is stored in a parquet file on Amazon S3.
@@ -25,11 +27,11 @@ git clone https://github.com/spiceai/samples.git
 cd samples/sales-bi
 ```
 
-Run the following command to start the 3 components in the Docker Compose file:
+Run the following command to start the components in the Docker Compose file:
 
 `make`
 
-This will start the PostgreSQL server, Spice runtime, and Apache Superset. The Spice runtime will load two datasets based on the parquet file in S3 - one is accelerated and one is not:
+This will start the Spice runtime and Apache Superset. The Spice runtime will load two datasets based on the parquet file in S3 - one is accelerated and one is not:
 
 ```yaml
 version: v1beta1
