@@ -3,14 +3,9 @@ kind: Spicepod
 name: sales-bi
 
 datasets:
-  - from: postgres:public.cleaned_sales_data
+  - from: s3://spiceai-demo-datasets/cleaned_sales_data.parquet
     name: cleaned_sales_data
-    params:
-      pg_host: postgres
-      pg_db: postgres
-      pg_user: postgres
-      pg_pass: postgres
-    acceleration:
-      enabled: true
-      refresh_interval: 10s
-      refresh_mode: full
+    # acceleration:
+    #   enabled: true
+    #   refresh_interval: 10s
+    #   refresh_mode: full

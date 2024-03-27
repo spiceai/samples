@@ -3,8 +3,6 @@ services:
     build:
       dockerfile: Dockerfile
     container_name: spiceai-sales-bi-demo
-    depends_on:
-      - postgres
     volumes:
       - ./spicepod.yaml:/root/spicepod.yaml
     expose:
@@ -23,21 +21,6 @@ services:
       - ./superset/dashboard:/dashboard
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  postgres:
-    image: "postgres:alpine"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./postgres:/docker-entrypoint-initdb.d
-    expose:
-      - 5432
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
