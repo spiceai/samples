@@ -1,25 +1,15 @@
 services:
-  # web:
-  #   build: .
-  #   ports:
-  #     - "9999:8080"
-  #   depends_on:
-  #     - postgres
-  #     - spiced
-  #     - spiced-materialized
-  #   environment:
-  #     - POSTGRES_CONN=host=postgres port=5432 dbname=postgres user=postgres password=postgres sslmode=disable
   spiceai:
     build:
       dockerfile: Dockerfile
     container_name: spiceai-sales-bi-demo
-    depends_on:
-      - postgres
     volumes:
       - ./spicepod.yaml:/root/spicepod.yaml
     expose:
       - "50051"
   superset:
+    depends_on:
+      - spiceai
     build:
       dockerfile: superset/Dockerfile
     container_name: superset-sales-bi-demo
@@ -27,23 +17,10 @@ services:
       - SUPERSET_SECRET_KEY=NFmeXP86te1aweCLZHXF89739mCuo5KkMd4hM+q3S6hD3ckLMmtL26Tr
     ports:
       - "8088:8088"
+    volumes:
+      - ./superset/dashboard:/dashboard
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-  postgres:
-    image: "postgres:alpine"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./init-pg:/docker-entrypoint-initdb.d
-    expose:
-      - 5432
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
