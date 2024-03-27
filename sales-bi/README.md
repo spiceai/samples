@@ -2,9 +2,9 @@
 
 ## Context
 
-This sample will show how to configure a BI dashboard (Apache Superset) to use Spice.ai as the data source for sales data. The sales data is stored in a PostgreSQL server. This PostgreSQL server is used by downstream sales applications to record new transactions. There is a requirement to run analytics on this data to power a BI dashboard to understand sales trends - but the operations team doesn't want to add any additional load to the production database.
+This sample will show how to configure a BI dashboard (Apache Superset) to use Spice as the data source for sales data. The sales data is stored in a parquet file on Amazon S3.
 
-Spice.ai can be used to accelerate data from connected data sources by keeping an automatically updated copy of the data in an optimized format. This data can be used to power a BI dashboard without adding any additional load to the production database.
+Spice.ai can be used to accelerate data from connected data sources by keeping an automatically updated copy of the data in an optimized format. This data can be used to power a BI dashboard that refreshes quickly.
 
 ## Pre-requisites
 
@@ -12,12 +12,11 @@ This sample requires [Docker](https://www.docker.com/) and [Docker Compose](http
 
 ## Running the sample
 
-![](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/c16c7dda-c403-4c71-0d6d-066005dd0e00/public)
+![](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/2c99263b-23a2-454f-9fdc-a9cfd67f8d00/public)
 
 This sample consists of a Docker Compose file with the following components:
-- A PostgreSQL server loaded with some sample sales data (`public.cleaned_sales_data`).
-- A Spice.ai runtime accelerating the data from the PostgreSQL server.
-- An Apache Superset instance to visualize the data, connected to the Spice.ai instance.
+- A Spice runtime accelerating the data from the parquet file in S3.
+- An Apache Superset instance to visualize the data, connected to the Spice instance.
 
 Clone the `spiceai/samples` repository and navigate to the `sales-bi` directory:
 
@@ -30,7 +29,7 @@ Run the following command to start the 3 components in the Docker Compose file:
 
 `make`
 
-This will start the PostgreSQL server, Spice.ai runtime, and Apache Superset. The Spice.ai runtime will automatically start locally accelerating the data from the PostgreSQL server, based on the following spicepod:
+This will start the PostgreSQL server, Spice runtime, and Apache Superset. The Spice runtime will load two datasets based on the parquet file in S3 - one is accelerated and one is not:
 
 ```yaml
 version: v1beta1
@@ -38,24 +37,23 @@ kind: Spicepod
 name: sales-bi
 
 datasets:
-  - from: postgres:public.cleaned_sales_data
-    name: cleaned_sales_data
-    params:
-      pg_host: postgres
-      pg_db: postgres
-      pg_user: postgres
-      pg_pass: postgres
+  - from: s3://spiceai-demo-datasets/cleaned_sales_data.parquet
+    name: cleaned_sales_data_accelerated
     acceleration:
       enabled: true
       refresh_interval: 10s
       refresh_mode: full
+
+  - from: s3://spiceai-demo-datasets/cleaned_sales_data.parquet
+    name: cleaned_sales_data
 ```
+
+Queries against `cleaned_sales_data` will always request data from the parquet file in S3, while queries against `cleaned_sales_data_accelerated` will be run against the locally accelerated copy of the parquet file.
 
 The output of the `make` command should look like:
 
 ```bash
  ✔ Container superset-sales-bi-demo  Started                                                                                                                                           0.0s
- ✔ Container sales-bi-postgres-1     Started                                                                                                                                           0.0s
  ✔ Container spiceai-sales-bi-demo   Started                                                                                                                                           0.0s
 Connection to localhost port 8088 [tcp/radan-http] succeeded!
 Initializing Superset...
@@ -65,15 +63,23 @@ Superset is running at http://localhost:8088, login with admin/admin
 
 Navigate to [http://localhost:8088](http://localhost:8088) to access the Apache Superset dashboard. The login credentials are `admin/admin`.
 
-Once logged in, navigate to the `Sales Dashboard` to view the sales data.
+Once logged in, navigate to the `Sales Dashboard (Federated)` to view the sales data that is querying against the non-accelerated data.
 
-![sales-bi-Sales-Dashboard.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/0c066733-4701-4407-be42-a913f315a500/public)
+![sales-bi-Sales-Dashboard-Federated.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/0c48f466-cbcc-4672-9df0-e165f90df200/public)
 
 Click on a product line to view the sales data for that product line, i.e. for `Vintage Cars`:
 
-![sales-bi-Sales-Dashboard-Vintage-Cars.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/c6a1be9c-a7c8-4ac4-d5d5-06514164d600/public)
+![sales-bi-Sales-Dashboard-Vintage-Cars-Federated.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/a580d789-ec8c-445d-0a17-1ead27e85000/public)
 
-In the top navigation bar, hover over the `SQL` menu and click on `SQL Lab` to view a query editor. Explore the data from the Spice.ai runtime by running SQL queries, i.e. `SELECT * FROM cleaned_sales_data LIMIT 10`:
+Notice that the dashboard takes a few seconds to load the data. This is because the data is being queried from the parquet file in S3.
+
+Navigate to the `Sales Dashboard (Accelerated)` to view the sales data that is querying against the accelerated data. Notice that the dashboard feels much more responsive.
+
+![sales-bi-Sales-Dashboard-Accelerated.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/3735c62c-e69a-4aba-5399-5b09a87dbe00/public)
+
+![sales-bi-Sales-Dashboard-Trucks-Buses-Accelerated.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/d0d0c14e-d281-46ac-de3c-e5e16a8e0200/public)
+
+In the top navigation bar, hover over the `SQL` menu and click on `SQL Lab` to view a query editor. Explore the data from the Spice.ai runtime by running SQL queries, i.e. `SELECT * FROM cleaned_sales_data LIMIT 10` or `SELECT * FROM cleaned_sales_data_accelerated LIMIT 10`:
 
 ![sales-bi-SQL-Lab.png](https://imagedelivery.net/HyTs22ttunfIlvyd6vumhQ/c90376cf-d56e-49a7-09f1-a1e53979b500/public)
 
