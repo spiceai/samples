@@ -14,12 +14,20 @@ The sample application has:
 
 ## How to run
 
+Clone this samples repo locally:
+```bash
+git clone https://github.com/spiceai/samples.git
+cd samples/acceleration
+```
+
 `make`
 
 then call the rankings API
 `curl localhost:9999/ranking`
 
 ## Performance benchmark using oha
+
+Install [oha](https://docs.rs/crate/oha/latest)
 
 ### From Postgres
 
