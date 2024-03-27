@@ -14,7 +14,7 @@ The sample application has:
 
 ## How to run
 
-Download sample code (if not done yet):
+Download sample code:
 ```bash
 git clone https://github.com/spiceai/samples.git
 cd samples/acceleration
