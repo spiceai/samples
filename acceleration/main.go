@@ -16,10 +16,20 @@ import (
 var PRODUCTS = []string{"the most beautiful flower", "the most delicious chocalate", "nintendo"}
 
 func main() {
-	fmt.Println("Start the exmaple application to use Spice")
+	if len(os.Args) > 1 && os.Args[1] == "setup" {
+		fmt.Println("Setting up")
+		setupDB()
+		os.Exit(0)
+	}
 
-	db := setupDB()
+	connStr := os.Getenv("POSTGRES_CONN")
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer db.Close()
+
+	fmt.Println("Start the example application to use Spice")
 
 	flightDb := flightsql.NewDB("flightsql://spiced:50051?timeout=20s")
 	materializedFlightDb := flightsql.NewDB("flightsql://spiced-materialized:50051?timeout=20s")
@@ -105,12 +115,13 @@ func orderHandler(db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func setupDB() *sql.DB {
+func setupDB() {
 	connStr := os.Getenv("POSTGRES_CONN")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS products (id SERIAL PRIMARY KEY, name TEXT NOT NULL)")
 	if err != nil {
@@ -138,5 +149,16 @@ func setupDB() *sql.DB {
 		log.Fatal(err)
 	}
 
-	return db
+	_, err = db.Exec("INSERT INTO orders (product_id, count) VALUES (1, 100)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = db.Exec("INSERT INTO orders (product_id, count) VALUES (2, 101)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = db.Exec("INSERT INTO orders (product_id, count) VALUES (3, 102)")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
