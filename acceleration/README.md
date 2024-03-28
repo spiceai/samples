@@ -15,7 +15,7 @@ The sample application has:
 - `/ranking-accelerated` - fetch data from Spice runtime without materialized ranking view, it pulls data from postgres into edge acceleration to improve query performance
 - `/ranking-materialized` - fetch data from Spice runtime with materialized ranking view, it pulls data from ranking view from the previous Spice runtime and accelerates it locally
 
-![Diagram](/Users/yong/code/work/samples/acceleration/diagram.png)
+![Diagram](./diagram.png)
 
 ## How to run
 
