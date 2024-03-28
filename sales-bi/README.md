@@ -1,6 +1,6 @@
 # Sales BI Dashboard
 
-Watch the [demo video](https://youtu.be/CTpctp6Sshg) that explains this sample or follow along with the steps below.
+https://github.com/spiceai/samples/assets/879445/ccc92377-0023-4073-ade1-09bb001ba886
 
 ## Context
 
