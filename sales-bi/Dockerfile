@@ -2,6 +2,7 @@ FROM debian as build
 
 RUN apt-get update && apt-get install -yqq curl jq
 
+ADD "https://api.github.com/repos/spiceai/spiceai/commits?per_page=1" latest_commit
 RUN curl https://install.spiceai.org/install-spiced.sh | /bin/bash
 
 FROM debian
