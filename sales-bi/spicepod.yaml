@@ -7,7 +7,7 @@ datasets:
     name: cleaned_sales_data_accelerated
     acceleration:
       enabled: true
-      refresh_interval: 10s
+      refresh_check_interval: 10s
       refresh_mode: full
 
   - from: s3://spiceai-demo-datasets/cleaned_sales_data.parquet
