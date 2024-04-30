@@ -15,7 +15,7 @@ go run .
 Results:
 
 ```shell
-➜ go run .
+go run .
 VendorID: 2
 tpep_pickup_datetime: 1705115889000000
 fare_amount: 11.4
