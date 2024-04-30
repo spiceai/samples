@@ -1,0 +1,36 @@
+# Spice with spicepy sdk sample
+
+## Start spice runtime
+
+```shell
+spice run
+```
+
+## Install dependencies
+
+```shell
+pip install git+https://github.com/spiceai/spicepy@v2.0.0
+```
+
+## Run sample application
+
+```shell
+python sample.py
+```
+
+Results:
+
+```shell
+➜ python sample.py 
+   trip_distance  total_amount
+0      312722.30         22.15
+1       97793.92         36.31
+2       82015.45         21.56
+3       72975.97         20.04
+4       71752.26         49.57
+5       59282.45         33.52
+6       59076.43         23.17
+7       58298.51         18.63
+8       51619.36         24.20
+9       44018.64         52.43
+```
