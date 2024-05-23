@@ -1,0 +1,14 @@
+version: v1beta1
+kind: Spicepod
+name: ftp_quickstart
+datasets:
+  - from: ftp://localhost/customers.csv
+    name: customers
+    params:
+      file_format: csv
+      ftp_user: user
+      ftp_pass: 123
+    acceleration:
+      enabled: true
+      refresh_mode: full
+      refresh_interval: 10s
