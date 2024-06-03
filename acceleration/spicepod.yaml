@@ -11,7 +11,6 @@ datasets:
       pg_user: postgres
       pg_pass: postgres
       pg_sslmode: disable
-      pg_insecure: true
     acceleration:
       enabled: true
       refresh: 10s
@@ -23,7 +22,6 @@ datasets:
       pg_user: postgres
       pg_pass: postgres
       pg_sslmode: disable
-      pg_insecure: true
     acceleration:
       enabled: true
       refresh: 10s
