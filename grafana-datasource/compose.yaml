@@ -1,20 +1,17 @@
 services:
   spice:
-    image: spiceai-rust:local-dev
-    # image: spiceai/spiceai
+    image: spiceai/spiceai
     container_name: spice
     ports:
-      - "3002:3002"
+      - "5000:3000"
       - "50051:50051"
+    working_dir: /app
     volumes:
-      - ./spicepod.yaml:/spicepod.yaml
-    environment:
-      - SPICE_SECRET_SPICEAI_KEY="333332|2ea6547000584c20b716ed4be8c39c41"
-      - SPICED_LOG=trace
-    command: ["--http", "0.0.0.0:3002"]
+      - ./spicepod.yaml:/app/spicepod.yaml
+    command: ["--http", "0.0.0.0:5000", "--flight", "0.0.0.0:50051"]
 
   grafana:
     image: grafana/grafana-enterprise
     container_name: grafana
     ports:
-      - "4000:3000"
+      - "3000:3000"
