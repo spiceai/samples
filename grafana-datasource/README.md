@@ -32,7 +32,7 @@ This will start the Spice runtime and Grafana server. The Spice runtime will loa
 
 3. Navigate to Administation -> Plugins and data -> Plugins.
 4. Select "State: All", and search for "FlightSQL".
-s
+
 ![screenshot](./img/grafana-datasource-2.png)
 
 5. Click on the "Install" button to install the plugin, and then "Add new data source".
@@ -41,7 +41,7 @@ s
 
 6. Fill in the following fields:
    - Name: `Spice`
-   - Host:Port: `spiceai:50051`
+   - Host:Port: `spice:50051`
    - Auth Type: `None`
 
 ![screenshot](./img/grafana-datasource-4.png)
@@ -72,7 +72,7 @@ Follow steps 1-3 from the previous section.
 
 6. Click on "Build a dashboard" and add a new visualization. Select "Infinity" from the list of data sources.
 
-7. Change "Method" to "POST" and "URL" to `http://spiceai:5000/v1/sql`. Add SQL query in body, using "Raw" mode:
+7. Change "Method" to "POST" and "URL" to `http://spice:5000/v1/sql`. Add SQL query in body, using "Raw" mode:
     ```sql
     SELECT to_timestamp(tpep_dropoff_datetime), fare_amount FROM public.taxi_trips LIMIT 100
     ```
