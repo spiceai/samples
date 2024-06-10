@@ -23,7 +23,7 @@ Run the following command to start the components in the Docker Compose file:
 
 This will start the Spice runtime and Grafana server. The Spice runtime will load two datasets based on the parquet file in S3.
 
-## Setup with FlightSQL Gerafana plugin
+## Setup with FlightSQL Grafana plugin
 
 1. Open Grafana in your browser at [http://localhost:3000](http://localhost:3000).
 2. Log in with the default credentials `admin`/`admin`, skip the password change prompt.
