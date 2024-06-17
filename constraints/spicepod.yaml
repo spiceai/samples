@@ -14,9 +14,9 @@ datasets:
       pg_sslmode: disable
     acceleration:
       enabled: true
-      engine: sqlite
+      engine: duckdb
       refresh_mode: append
       refresh_check_interval: 5s
-    primary_key: email
-    on_conflict:
-      email: upsert
+      primary_key: email
+      on_conflict:
+        email: upsert
