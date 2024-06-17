@@ -13,7 +13,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var PRODUCTS = []string{"the most beautiful flower", "the most delicious chocalate", "nintendo"}
+var PRODUCTS = []string{"the most beautiful flower", "the most delicious chocolate", "nintendo"}
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "setup" {
@@ -34,6 +34,7 @@ func main() {
 	flightDb := flightsql.NewDB("flightsql://spiced:50051?timeout=20s")
 	materializedFlightDb := flightsql.NewDB("flightsql://spiced-materialized:50051?timeout=20s")
 	defer flightDb.Close()
+	defer materializedFlightDb.Close()
 
 	http.HandleFunc("/ranking", rankingHandler(db))
 	http.HandleFunc("/ranking-accelerated", rankingHandler(flightDb))
