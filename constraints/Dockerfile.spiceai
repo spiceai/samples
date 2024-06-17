@@ -1,22 +1,18 @@
 #syntax=docker/dockerfile:1.2
 
 # Remove the rust build once v0.14 is released
-# ARG RUST_VERSION=1.78
-# FROM rust:${RUST_VERSION}-slim-bookworm as build
+ARG RUST_VERSION=1.78
+FROM rust:${RUST_VERSION}-slim-bookworm as build
 
-# COPY spiceai /build
+COPY spiceai /build
 
-# WORKDIR /build
+WORKDIR /build
 
-# RUN apt update \
-#     && apt install --yes pkg-config libssl-dev build-essential libsqlite3-dev cmake protobuf-compiler unixodbc-dev
+RUN apt update \
+    && apt install --yes pkg-config libssl-dev build-essential libsqlite3-dev cmake protobuf-compiler unixodbc-dev
 
-# RUN cargo build && \
-#   cp /build/target/debug/spiced /usr/local/bin/spiced
-
-FROM debian as build
-
-COPY bin/spiced /usr/local/bin
+RUN cargo build && \
+  cp /build/target/debug/spiced /usr/local/bin/spiced
 
 # Uncomment the below once v0.14 is released
 # FROM debian as build
