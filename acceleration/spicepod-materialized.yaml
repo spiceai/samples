@@ -9,4 +9,4 @@ datasets:
       endpoint: http://spiced:50051
     acceleration:
       enabled: true
-      refresh: 10s
+      refresh_check_interval: 10s
