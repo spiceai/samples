@@ -6,6 +6,7 @@ Learn about Spice.ai with in-depth samples.
 
 - [Sales BI Dashboard](sales-bi/README.md)
 - [Local Materialization and Acceleration CQRS](acceleration/README.md)
+- [Accelerated table data quality with constraint enforcement](constraints/README.md)
 
 ## Deploy Spice.ai
 
