@@ -25,8 +25,8 @@ datasets:
     acceleration:
       enabled: true
       refresh: 10s
+
+views:
   - name: rankings
     sql: with a as (SELECT products.id, sum(count) as count FROM orders INNER JOIN products ON orders.product_id = products.id GROUP BY products.id) select name, count from products left join a on products.id = a.id order by count desc limit 5
-    params:
-      schema: create table rankings (name string, count int);
 
