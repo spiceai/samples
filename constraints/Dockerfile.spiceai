@@ -1,26 +1,9 @@
-#syntax=docker/dockerfile:1.2
+FROM debian as build
 
-# Remove the rust build once v0.14 is released
-ARG RUST_VERSION=1.78
-FROM rust:${RUST_VERSION}-slim-bookworm as build
+RUN apt-get update && apt-get install -yqq curl jq
 
-COPY spiceai /build
-
-WORKDIR /build
-
-RUN apt update \
-    && apt install --yes pkg-config libssl-dev build-essential libsqlite3-dev cmake protobuf-compiler unixodbc-dev
-
-RUN cargo build && \
-  cp /build/target/debug/spiced /usr/local/bin/spiced
-
-# Uncomment the below once v0.14 is released
-# FROM debian as build
-
-# RUN apt-get update && apt-get install -yqq curl jq
-
-# ADD "https://api.github.com/repos/spiceai/spiceai/commits?per_page=1" latest_commit
-# RUN curl https://install.spiceai.org/install-spiced.sh | /bin/bash
+ADD "https://api.github.com/repos/spiceai/spiceai/commits?per_page=1" latest_commit
+RUN curl https://install.spiceai.org/install-spiced.sh | /bin/bash
 
 FROM debian
 
