@@ -7,6 +7,7 @@ Learn about Spice.ai with in-depth samples.
 - [Sales BI Dashboard](sales-bi/README.md)
 - [Local Materialization and Acceleration CQRS](acceleration/README.md)
 - [Accelerated table data quality with constraint enforcement](constraints/README.md)
+- [Streaming changes in real-time with Debezium CDC](cdc-debezium/README.md)
 
 ## Deploy Spice.ai
 
