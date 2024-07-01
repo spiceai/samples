@@ -12,6 +12,8 @@ Also ensure that you have the `spice` CLI installed. You can find instructions o
 
 You will also need `psql` or another Database client (i.e. DBeaver) to connect to the Postgres database.
 
+`curl` is required to register the Debezium Postgres connector.
+
 ## How to run
 
 Clone this samples repo locally and navigate to the `cdc-debezium` directory:
@@ -27,7 +29,7 @@ Start the Docker Compose stack, which includes a Postgres database, a Kafka brok
 
 Navigate to http://localhost:8080 to see the Redpanda console. Notice that no topics are created by Debezium yet. We need to tell Debezium to connect to the Postgres database and create the topics.
 
-`make register-connector`
+`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-connector.json`
 
 Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the Postgres database. Open http://localhost:8080/topics and see the topic `cdc.public.customer_addresses` created.
 
@@ -100,3 +102,17 @@ Stop spice with `Ctrl+C`
 Restart Spice with `spice run`
 
 Observe that it doesn't replay the changes and the data is still there. Only new changes will be consumed.
+
+## Clean up
+
+To stop and remove the Docker containers/volumes that were created, run:
+
+`make clean`
+
+If you don't have the `make` command available, you can run the following commands:
+
+```bash
+docker compose down
+docker volume prune -f
+docker image prune -f
+```
