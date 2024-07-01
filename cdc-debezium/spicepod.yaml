@@ -1,0 +1,23 @@
+version: v1beta1
+kind: Spicepod
+name: cdc-debezium
+
+datasets:
+- from: debezium:cdc.public.customer_addresses
+  name: cdc
+  params:
+    debezium_transport: kafka
+    debezium_message_format: json
+    kafka_bootstrap_servers: localhost:19092
+  acceleration:
+    enabled: true
+    engine: duckdb
+    mode: file
+    refresh_mode: changes
+    params:
+      pg_host: localhost
+      pg_port: 5432
+      pg_user: postgres
+      pg_pass: P0rsche911
+      pg_db: acceleration
+      pg_sslmode: disable
