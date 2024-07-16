@@ -1,8 +1,17 @@
 # Spice with Java sdk sample
 
-<https://github.com/spiceai/spice-java>
+Use [Spice.ai Java SDK](https://github.com/spiceai/spice-java) to query [Spice.ai](https://github.com/spiceai/spiceai) from Java.
+
+## Clone this sample
+
+```shell
+git clone https://github.com/spiceai/samples.git
+cd samples/client-sdk/spice-java-sdk-sample
+```
 
 ## Start spice runtime
+
+[Install Spice.ai OSS](https://docs.spiceai.org/getting-started) and start Spice runtime:
 
 ```shell
 spice run
@@ -69,8 +78,9 @@ mvn clean compile
 
 ### Run sample
 
-The Spice SDK uses Apache Arrow Flight library which requires `--add-opens=java.base/java.nio=ALL-UNNAMED` parameter to operate.
-Read [Apache Arrow Java Compatibility](https://arrow.apache.org/docs/java/install.html#java-compatibility) for more details.
+> **IMPORTANT:** The Spice SDK uses the Apache Arrow Flight library, which requires the `--add-opens=java.base/java.nio=ALL-UNNAMED` parameter to operate.
+>
+> Read [Apache Arrow Java Compatibility](https://arrow.apache.org/docs/java/install.html#java-compatibility) for more details.
 
 ```shell
 _JAVA_OPTIONS="--add-opens=java.base/java.nio=ALL-UNNAMED" mvn exec:java -Dexec.mainClass="ai.spice.example.App"
@@ -96,7 +106,7 @@ VendorID        tpep_pickup_datetime    fare_amount
 1       2024-01-14T08:15:17     16.3
 1       2024-01-14T08:49:57     10.7
 2       2024-01-14T08:28:37     14.2
-2       2024-01-14T08:42:59     12.8
+2       2024-01-14T08:42:59     12.0
 2       2024-01-14T08:49:26     7.2
 1       2024-01-14T08:10:31     7.2
 1       2024-01-14T08:17:35     5.1
@@ -107,7 +117,7 @@ VendorID        tpep_pickup_datetime    fare_amount
 ### Prerequisites
 
 1. A Java Development Kit (JDK), version 17 or higher - for example [OracleJDK](https://www.oracle.com/java/technologies/downloads/). Installed version can be verified with `java -version`.
-1. [Gradle Build Tools](https://gradle.org/install/)
+1. [Gradle Build Tools version 7.0 or later](https://gradle.org/install/). Installed version can be verified with `gradle -v`.
 
 
 ### Init gradle wrapper
