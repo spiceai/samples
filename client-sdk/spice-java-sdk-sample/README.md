@@ -19,10 +19,10 @@ spice run
 
 ```shell
 Spice.ai runtime starting...
-2024-07-16T19:16:34.192387Z  INFO spiced: Metrics listening on 127.0.0.1:9000
+2024-07-16T19:16:34.192387Z  INFO spiced: Metrics listening on 127.0.0.1:9090
 2024-07-16T19:16:34.195177Z  INFO runtime::opentelemetry: Spice Runtime OpenTelemetry listening on 127.0.0.1:50052
 2024-07-16T19:16:34.197072Z  INFO runtime: Initialized results cache; max size: 128.00 MiB, item ttl: 1s
-2024-07-16T19:16:34.197759Z  INFO runtime::http: Spice Runtime HTTP listening on 127.0.0.1:3000
+2024-07-16T19:16:34.197759Z  INFO runtime::http: Spice Runtime HTTP listening on 127.0.0.1:8090
 2024-07-16T19:16:34.197770Z  INFO runtime::flight: Spice Runtime Flight listening on 127.0.0.1:50051
 2024-07-16T19:16:34.885084Z  INFO runtime: Dataset taxi_trips registered (s3://spiceai-demo-datasets/taxi_trips/2024/), acceleration (arrow, 10s refresh), results cache enabled.
 2024-07-16T19:16:34.886257Z  INFO runtime::accelerated_table::refresh_task: Loading data for dataset taxi_trips
