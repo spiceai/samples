@@ -1,4 +1,4 @@
-# Adding spice as Grafana datasource
+# Adding Spice as a Grafana datasource
 
 ## Context
 
@@ -52,6 +52,7 @@ This will start the Spice runtime and Grafana server. The Spice runtime will loa
 ![screenshot](./img/grafana-datasource-5.png)
 
 9. Switch to SQL query editor and paste the following query:
+
    ```sql
    SELECT to_timestamp(tpep_dropoff_datetime), fare_amount FROM public.taxi_trips LIMIT 100
    ```
@@ -73,6 +74,7 @@ Follow steps 1-3 from the previous section.
 6. Click on "Build a dashboard" and add a new visualization. Select "Infinity" from the list of data sources.
 
 7. Change "Method" to "POST" and "URL" to `http://spice:5000/v1/sql`. Add SQL query in body, using "Raw" mode:
+
     ```sql
     SELECT to_timestamp(tpep_dropoff_datetime), fare_amount FROM public.taxi_trips LIMIT 100
     ```
