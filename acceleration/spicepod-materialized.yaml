@@ -6,7 +6,7 @@ datasets:
   - from: flightsql:rankings
     name: rankings
     params:
-      endpoint: http://spiced:50051
+      flightsql_endpoint: http://spiced:50051
     acceleration:
       enabled: true
       refresh_check_interval: 10s
