@@ -3,7 +3,7 @@ services:
     image: spiceai/spiceai
     container_name: spice
     ports:
-      - "5000:8090"
+      - "5000:5000"
       - "50051:50051"
     working_dir: /app
     volumes:
