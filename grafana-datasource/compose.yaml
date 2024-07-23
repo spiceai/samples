@@ -3,12 +3,12 @@ services:
     image: spiceai/spiceai
     container_name: spice
     ports:
-      - "5000:3000"
+      - "8090:8090"
       - "50051:50051"
     working_dir: /app
     volumes:
       - ./spicepod.yaml:/app/spicepod.yaml
-    command: ["--http", "0.0.0.0:5000", "--flight", "0.0.0.0:50051"]
+    command: ["--http", "0.0.0.0:8090", "--flight", "0.0.0.0:50051"]
 
   grafana:
     image: grafana/grafana-enterprise
