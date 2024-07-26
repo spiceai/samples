@@ -1,0 +1,18 @@
+[ req ]
+default_bits       = 256
+default_keyfile    = spiced.key
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+prompt             = no
+
+[ req_distinguished_name ]
+CN = spiced.default.pod.cluster.local
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = spiced.default.svc.cluster.local
+DNS.2 = spiced.default.pod.cluster.local
+DNS.3 = localhost
+IP.1 = 127.0.0.1
