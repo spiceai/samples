@@ -4,7 +4,19 @@ This sample will guide you through the steps required to set up secure communica
 
 # Requirements
 - OpenSSL
+  - macOS: `brew install openssl`
+  - Ubuntu: `sudo apt-get install openssl`
+  - Windows: [Download OpenSSL](https://slproweb.com/products/Win32OpenSSL.html)
 - Spice.ai runtime
+  - [Install Spice.ai](https://docs.spiceai.org/installation)
+
+# Navigate to the `tls` directory
+
+The rest of the commands in this tutorial should be run from the `tls` directory.
+
+```bash
+cd tls
+```
 
 # Create a CA
 
@@ -20,8 +32,6 @@ openssl req -new -x509 -key ca.key -out ca.pem -days 3650 -config ca.cnf
 Next, we'll create a private key and a CSR for the `spiced` service.
 
 ```bash
-# Ensure you are in the tls directory
-cd tls
 # Generate a private key (ECDSA)
 openssl ecparam -genkey -name prime256v1 -out spiced.key
 # Generate a certificate signing request (CSR) for the private key
