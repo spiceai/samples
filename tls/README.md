@@ -86,6 +86,8 @@ spiced --tls --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
 
 # Verify the TLS connection
 
+In a separate terminal, verify the TLS connection using cURL.
+
 ```bash
 curl --cacert ca.pem https://localhost:8090/health
 ```
@@ -95,13 +97,14 @@ curl --cacert ca.pem https://localhost:8090/health
 The sample Go application connects securely to the `spiced` service over TLS and does a simple query using the `flightsql` ADBC driver.
 
 ```bash
+cd tls # If not already in the tls directory
 go run main.go
 ```
 
 # Use `spice sql` to securely connect to the `spiced` service
 
 ```bash
-spice sql --tls-ca-certificate-file ./ca.pem
+spice sql --tls-root-certificate-file ./ca.pem
 ```
 
 Run a simple query to verify the connection.
@@ -111,7 +114,7 @@ SELECT * FROM customer_addresses LIMIT 5;
 ```
 
 # Clean up
-  
+
 ```bash
 rm ca.key ca.pem spiced.key spiced.csr spiced.crt postgres.key postgres.csr postgres.crt
 docker compose down
