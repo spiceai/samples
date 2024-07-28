@@ -68,6 +68,14 @@ Sign the CSR with the CA to generate a certificate for `postgres`.
 openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -days 365 -copy_extensions copy
 ```
 
+# Start `postgres` with TLS
+
+Start a `postgres` instance with TLS enabled using Docker compose.
+
+```bash
+docker compose up -d
+```
+
 # Run `spiced` with TLS
 
 With the certificate and key generated, run the `spiced` service with TLS enabled.
@@ -102,6 +110,13 @@ Run a simple query to verify the connection.
 SELECT * FROM customer_addresses LIMIT 5;
 ```
 
-## Summary
+# Clean up
+  
+```bash
+rm ca.key ca.pem spiced.key spiced.csr spiced.crt postgres.key postgres.csr postgres.crt
+docker compose down
+```
+
+# Summary
 
 This sample covered how to configure the Spice runtime to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
