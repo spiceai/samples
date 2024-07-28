@@ -90,6 +90,18 @@ The sample Go application connects securely to the `spiced` service over TLS and
 go run main.go
 ```
 
+# Use `spice sql` to securely connect to the `spiced` service
+
+```bash
+spice sql --tls-ca-certificate-file ./ca.pem
+```
+
+Run a simple query to verify the connection.
+
+```sql
+SELECT * FROM customer_addresses LIMIT 5;
+```
+
 ## Summary
 
 This sample covered how to configure the Spice runtime to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
