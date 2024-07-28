@@ -4,3 +4,6 @@ spiced.crt
 spiced.csr
 spiced.key
 cfssl
+postgres.crt
+postgres.csr
+postgres.key

@@ -38,11 +38,28 @@ openssl ecparam -genkey -name prime256v1 -out spiced.key
 openssl req -new -key spiced.key -out spiced.csr -config spiced.cnf
 ```
 
-# Sign the CSR with the CA
+## Sign the CSR with the CA
 Now, we'll sign the CSR with the CA to generate a certificate for the `spiced` service.
 ```bash
 # Sign the CSR with the CA
-openssl x509 -req -in spiced.csr -CA ca.pem -CAkey ca.key -out spiced.crt -days 3650 -copy_extensions copy
+openssl x509 -req -in spiced.csr -CA ca.pem -CAkey ca.key -out spiced.crt -days 365 -copy_extensions copy
+```
+
+# Create a certificate signing request & private key for `postgres`
+Similar to `spiced` we'll create a private key and a CSR for the `postgres` instance.
+
+```bash
+# Generate a private key (ECDSA)
+openssl ecparam -genkey -name prime256v1 -out postgres.key
+# Generate a certificate signing request (CSR) for the private key
+openssl req -new -key postgres.key -out postgres.csr -config postgres.cnf
+```
+
+## Sign the CSR with the CA
+Now, we'll sign the CSR with the CA to generate a certificate for the `postgres` instance.
+```bash
+# Sign the CSR with the CA
+openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -days 365 -copy_extensions copy
 ```
 
 # Run `spiced` with TLS

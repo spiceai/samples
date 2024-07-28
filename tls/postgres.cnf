@@ -1,7 +1,7 @@
 [ req ]
 default_bits       = 2048
 default_md         = sha256
-default_keyfile    = spiced.key
+default_keyfile    = postgres.key
 prompt             = no
 encrypt_key        = no
 
@@ -14,7 +14,7 @@ ST = Washington
 L  = Seattle
 O  = Widgets, Inc.
 OU = IT
-CN = spiced.localhost
+CN = postgres.localhost
 
 [ req_ext ]
 subjectAltName = @alt_names
@@ -22,7 +22,7 @@ extendedKeyUsage = serverAuth
 
 [ alt_names ]
 DNS.1 = localhost
-DNS.2 = spiced-tls
+DNS.2 = postgres-tls
 IP.1 = 127.0.0.1
 
 [ v3_ca ]
