@@ -1,6 +1,8 @@
 # Secure communication with TLS
 
-This sample will guide you through the steps required to set up secure communication using TLS using the Spice.ai runtime. We will cover the creation of a Certificate Authority (CA), generating a certificate signing request (CSR) and private key, signing the CSR with the CA, and running Spice with TLS.
+This sample covers how to configure Spiced to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
+
+First a CA (Certificate Authority) will be created with OpenSSL. Then, certificates will be generated for the `spiced` service and a `postgres` instance and signed by the CA. `postgres` & `spiced` will be started with TLS enabled. The `spicepod.yaml` included in this sample will connect securely to `postgres`. Finally, the TLS connection will be verified using cURL and running a small Go application that connects and does a simple query to the `spiced` service.
 
 # Requirements
 - OpenSSL
@@ -9,6 +11,9 @@ This sample will guide you through the steps required to set up secure communica
   - Windows: [Download OpenSSL](https://slproweb.com/products/Win32OpenSSL.html)
 - Spice.ai runtime
   - [Install Spice.ai](https://docs.spiceai.org/installation)
+- cURL
+- Docker
+- Go (optional, for building the sample application)
 
 # Navigate to the `tls` directory
 
@@ -18,9 +23,9 @@ The rest of the commands in this tutorial should be run from the `tls` directory
 cd tls
 ```
 
-# Create a CA
+# Create a CA (Certificate Authority)
 
-First, we need to create a CA. This involves generating a private key and a self-signed certificate for the CA.
+First, create a CA. This involves generating a private key and a self-signed certificate.
 
 ```bash
 # Generate a private key and self-signed certificate for the CA
@@ -29,7 +34,7 @@ openssl req -new -x509 -key ca.key -out ca.pem -days 3650 -config ca.cnf
 ```
 
 # Create a certificate signing request & private key for `spiced`
-Next, we'll create a private key and a CSR for the `spiced` service.
+Next, create a private key and a CSR (Certificate Signing Request) for `spiced`.
 
 ```bash
 # Generate a private key (ECDSA)
@@ -39,14 +44,15 @@ openssl req -new -key spiced.key -out spiced.csr -config spiced.cnf
 ```
 
 ## Sign the CSR with the CA
-Now, we'll sign the CSR with the CA to generate a certificate for the `spiced` service.
+Sign the CSR with the CA to generate a certificate for `spiced`.
+
 ```bash
 # Sign the CSR with the CA
 openssl x509 -req -in spiced.csr -CA ca.pem -CAkey ca.key -out spiced.crt -days 365 -copy_extensions copy
 ```
 
 # Create a certificate signing request & private key for `postgres`
-Similar to `spiced` we'll create a private key and a CSR for the `postgres` instance.
+Similar to `spiced` create a private key and a CSR for `postgres`.
 
 ```bash
 # Generate a private key (ECDSA)
@@ -56,7 +62,7 @@ openssl req -new -key postgres.key -out postgres.csr -config postgres.cnf
 ```
 
 ## Sign the CSR with the CA
-Now, we'll sign the CSR with the CA to generate a certificate for the `postgres` instance.
+Sign the CSR with the CA to generate a certificate for `postgres`.
 ```bash
 # Sign the CSR with the CA
 openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -days 365 -copy_extensions copy
@@ -64,7 +70,7 @@ openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -d
 
 # Run `spiced` with TLS
 
-With the certificate and key generated, we can now run the `spiced` service with TLS enabled.
+With the certificate and key generated, run the `spiced` service with TLS enabled.
 
 ```bash
 spiced --tls --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
@@ -76,10 +82,14 @@ spiced --tls --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
 curl --cacert ca.pem https://localhost:8090/health
 ```
 
-If the connection is successful, you should see a response indicating that the service is up and running.
+# Build and run the sample Go application
+
+The sample Go application connects securely to the `spiced` service over TLS and does a simple query using the `flightsql` ADBC driver.
+
+```bash
+go run main.go
+```
 
 ## Summary
 
-In this tutorial, we've walked through the process of setting up TLS for secure communication. We created a CA, generated a CSR and private key for the `spiced` service, signed the CSR with the CA, ran the service with TLS, and verified the TLS connection. Following these steps ensures that your communication is encrypted and secure.
-
-Feel free to reach out if you have any questions or need further assistance!
+This sample covered how to configure the Spice runtime to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
