@@ -41,17 +41,17 @@ kind: Spicepod
 name: cdc-debezium
 
 datasets:
-- from: debezium:cdc.public.customer_addresses
-  name: cdc
-  params:
-    debezium_transport: kafka
-    debezium_message_format: json
-    kafka_bootstrap_servers: localhost:19092
-  acceleration:
-    enabled: true
-    engine: duckdb
-    mode: file
-    refresh_mode: changes
+  - from: debezium:cdc.public.customer_addresses
+    name: cdc
+    params:
+      debezium_transport: kafka
+      debezium_message_format: json
+      kafka_bootstrap_servers: localhost:19092
+    acceleration:
+      enabled: true
+      engine: duckdb
+      mode: file
+      refresh_mode: changes
 ```
 
 Start the Spice runtime, ensuring you are in the `cdc-debezium` directory:
@@ -84,8 +84,8 @@ PGPASSWORD="postgres" psql -h localhost -U postgres -d postgres -p 15432
 ```
 
 ```sql
-INSERT INTO public.customer_addresses (id, first_name, last_name, email) 
-VALUES 
+INSERT INTO public.customer_addresses (id, first_name, last_name, email)
+VALUES
 (100, 'John', 'Doe', 'john@doe.com');
 ```
 
@@ -97,11 +97,25 @@ SELECT * FROM cdc;
 
 Now let's see what happens when we stop Spice and restart it. The data should still be there and it should not replay all of the changes from the beginning.
 
+```
+2024-07-29T23:21:47.934358Z  INFO runtime::accelerated_table::refresh_task::changes: Upserting data row for cdc with id=100
+```
+
 Stop spice with `Ctrl+C`
 
 Restart Spice with `spice run`
 
 Observe that it doesn't replay the changes and the data is still there. Only new changes will be consumed.
+
+```
+Spice.ai runtime starting...
+2024-07-29T23:22:04.303861Z  INFO runtime::flight: Spice Runtime Flight listening on 127.0.0.1:50051
+2024-07-29T23:22:04.303925Z  INFO runtime::metrics_server: Spice Runtime Metrics listening on 127.0.0.1:9090
+2024-07-29T23:22:04.304011Z  INFO runtime::http: Spice Runtime HTTP listening on 127.0.0.1:8090
+2024-07-29T23:22:04.303850Z  INFO runtime: Initialized results cache; max size: 128.00 MiB, item ttl: 1s
+2024-07-29T23:22:04.306271Z  INFO runtime::opentelemetry: Spice Runtime OpenTelemetry listening on 127.0.0.1:50052
+2024-07-29T23:22:04.331209Z  INFO runtime: Dataset cdc registered (debezium:cdc.public.customer_addresses), acceleration (duckdb:file, changes), results cache enabled.
+```
 
 ## Clean up
 
