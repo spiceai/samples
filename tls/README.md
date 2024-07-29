@@ -1,6 +1,6 @@
 # Secure communication with TLS
 
-This sample covers how to configure Spiced to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
+This sample covers how to configure Spice to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
 
 First a CA (Certificate Authority) will be created with OpenSSL. Then, certificates will be generated for the `spiced` service and a `postgres` instance and signed by the CA. `postgres` & `spiced` will be started with TLS enabled. The `spicepod.yaml` included in this sample will connect securely to `postgres`. Finally, the TLS connection will be verified using cURL and running a small Go application that connects and does a simple query to the `spiced` service.
 
@@ -81,7 +81,7 @@ docker compose up -d
 With the certificate and key generated, run the `spiced` service with TLS enabled.
 
 ```bash
-spiced --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
+spice run -- --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
 ```
 
 # Verify the TLS connection
