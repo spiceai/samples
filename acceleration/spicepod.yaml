@@ -13,7 +13,7 @@ datasets:
       pg_sslmode: disable
     acceleration:
       enabled: true
-      refresh: 10s
+      refresh_check_interval: 10s
   - from: postgres:public.orders
     name: orders
     params:
@@ -24,7 +24,7 @@ datasets:
       pg_sslmode: disable
     acceleration:
       enabled: true
-      refresh: 10s
+      refresh_check_interval: 10s
 
 views:
   - name: rankings
