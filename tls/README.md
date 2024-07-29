@@ -76,6 +76,19 @@ openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -d
 
 # Start `postgres` with TLS
 
+## Ubuntu: Change key file owner and permissions
+
+On Ubuntu, permissions changes are required to allow the `postgres` Docker instance to accesss the key.
+
+Set the owner to the UID `999` and GID `999`, which [match the UID and GID of the `postgres` user.](https://github.com/docker-library/postgres/blob/master/17/bullseye/Dockerfile#L10-L13)
+
+```bash
+sudo chown 999:999 postgres.key
+sudo chmod 600 postgres.key
+```
+
+## Start `postgres`
+
 Start a `postgres` instance with TLS enabled using Docker compose.
 
 ```bash
