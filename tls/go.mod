@@ -3,8 +3,11 @@ module github.com/spiceai/samples/tls
 go 1.22.2
 
 require (
-	github.com/apache/arrow-adbc/go/adbc v1.1.0 // indirect
-	github.com/apache/arrow/go/v17 v17.0.0-20240626234237-6680dcfbef42 // indirect
+	github.com/apache/arrow-adbc/go/adbc v1.1.0
+	github.com/apache/arrow/go/v17 v17.0.0-20240626234237-6680dcfbef42
+)
+
+require (
 	github.com/bluele/gcache v0.0.2 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/google/flatbuffers v24.3.25+incompatible // indirect
@@ -21,6 +24,6 @@ require (
 	golang.org/x/tools v0.22.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240318140521-94a12d6c2237 // indirect
-	google.golang.org/grpc v1.64.0 // indirect
+	google.golang.org/grpc v1.64.1 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 )
