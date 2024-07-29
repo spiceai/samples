@@ -9,6 +9,10 @@ Learn about Spice.ai with in-depth samples.
 - [Accelerated table data quality with constraint enforcement](constraints/README.md)
 - [Streaming changes in real-time with Debezium CDC](cdc-debezium/README.md)
 
+## Security
+
+- [Secure communication with TLS](tls/README.md)
+
 ## Deploy Spice.ai
 
 - Kubernetes - Sample coming soon.
