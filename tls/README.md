@@ -1,10 +1,11 @@
-# Secure communication with TLS
+# Encryption in transit using TLS
 
-This sample covers how to configure Spice to connect to remote data sources securely using TLS, how to configure the Spice runtime to use TLS for its own endpoints, and how to create an application that connects to the runtime securely.
+This sample demonstrates configuring Spice for encryption in transit using TLS and includes a sample client application that connects to the runtime securely. The Spice runtime is configured to use TLS for remote connections and to require TLS for its own HTTP and gRPC endpoints.
 
 First a CA (Certificate Authority) will be created with OpenSSL. Then, certificates will be generated for the `spiced` service and a `postgres` instance and signed by the CA. `postgres` & `spiced` will be started with TLS enabled. The `spicepod.yaml` included in this sample will connect securely to `postgres`. Finally, the TLS connection will be verified using cURL and running a small Go application that connects and does a simple query to the `spiced` service.
 
 # Requirements
+
 - OpenSSL
   - macOS: `brew install openssl`
   - Ubuntu: `sudo apt-get install openssl`
@@ -34,6 +35,7 @@ openssl req -new -x509 -key ca.key -out ca.pem -days 3650 -config ca.cnf
 ```
 
 # Create a certificate signing request & private key for `spiced`
+
 Next, create a private key and a CSR (Certificate Signing Request) for `spiced`.
 
 ```bash
@@ -44,6 +46,7 @@ openssl req -new -key spiced.key -out spiced.csr -config spiced.cnf
 ```
 
 ## Sign the CSR with the CA
+
 Sign the CSR with the CA to generate a certificate for `spiced`.
 
 ```bash
@@ -52,6 +55,7 @@ openssl x509 -req -in spiced.csr -CA ca.pem -CAkey ca.key -out spiced.crt -days 
 ```
 
 # Create a certificate signing request & private key for `postgres`
+
 Similar to `spiced` create a private key and a CSR for `postgres`.
 
 ```bash
@@ -62,7 +66,9 @@ openssl req -new -key postgres.key -out postgres.csr -config postgres.cnf
 ```
 
 ## Sign the CSR with the CA
+
 Sign the CSR with the CA to generate a certificate for `postgres`.
+
 ```bash
 # Sign the CSR with the CA
 openssl x509 -req -in postgres.csr -CA ca.pem -CAkey ca.key -out postgres.crt -days 365 -copy_extensions copy
