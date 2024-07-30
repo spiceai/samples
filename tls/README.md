@@ -100,7 +100,7 @@ docker compose up -d
 With the certificate and key generated, run the `spiced` service with TLS enabled.
 
 ```bash
-spice run -- --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
+spice run -- --tls-enabled true --tls-certificate-file ./spiced.crt --tls-key-file ./spiced.key
 ```
 
 ## Verify the TLS connection
