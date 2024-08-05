@@ -49,49 +49,48 @@ See more details below.
 ```bash
 …/sample-1 main ❯ oha -n20000 -c100 'http://localhost:9999/ranking'
 Summary:
-  Success rate: 100.00%
-  Total:        47.4194 secs
-  Slowest:      1.1856 secs
-  Fastest:      0.0003 secs
-  Average:      0.2364 secs
-  Requests/sec: 421.7687
+  Success rate:	100.00%
+  Total:	50.0597 secs
+  Slowest:	1.3095 secs
+  Fastest:	0.0004 secs
+  Average:	0.2493 secs
+  Requests/sec:	399.5230
 
-  Total data:   2.70 MiB
-  Size/request: 14
-  Size/sec:     58.41 KiB
+  Total data:	2.70 MiB
+  Size/request:	14
+  Size/sec:	55.23 KiB
 
 Response time histogram:
   0.000 [1]    |
-  0.119 [8011] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.237 [2189] |■■■■■■■■
-  0.356 [3873] |■■■■■■■■■■■■■■■
-  0.474 [3152] |■■■■■■■■■■■■
-  0.593 [1840] |■■■■■■■
-  0.711 [736]  |■■
-  0.830 [154]  |
-  0.949 [30]   |
-  1.067 [9]    |
-  1.186 [5]    |
+  0.131 [7903] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.262 [1743] |■■■■■■■
+  0.393 [5149] |■■■■■■■■■■■■■■■■■■■■
+  0.524 [3935] |■■■■■■■■■■■■■■■
+  0.655 [589]  |■■
+  0.786 [344]  |■
+  0.917 [228]  |
+  1.048 [62]   |
+  1.179 [26]   |
+  1.309 [20]   |
 
 Response time distribution:
-  10.00% in 0.0029 secs
-  25.00% in 0.0523 secs
-  50.00% in 0.2186 secs
-  75.00% in 0.3927 secs
-  90.00% in 0.4981 secs
-  95.00% in 0.5898 secs
-  99.00% in 0.7113 secs
-  99.90% in 0.9032 secs
-  99.99% in 1.1139 secs
-
+  10.00% in 0.0045 secs
+  25.00% in 0.0811 secs
+  50.00% in 0.2872 secs
+  75.00% in 0.3949 secs
+  90.00% in 0.4966 secs
+  95.00% in 0.5982 secs
+  99.00% in 0.8820 secs
+  99.90% in 1.1877 secs
+  99.99% in 1.2986 secs
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0027 secs, 0.0012 secs, 0.0031 secs
-  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0002 secs
+  DNS+dialup:	0.0022 secs, 0.0009 secs, 0.0110 secs
+  DNS-lookup:	0.0001 secs, 0.0000 secs, 0.0008 secs
 
 Status code distribution:
-  [200] 19964 responses
-  [500] 36 responses
+  [200] 19917 responses
+  [500] 83 responses
 ```
 
 ### From Spice.ai OSS with acceleration, without materialized view
@@ -99,45 +98,45 @@ Status code distribution:
 ```bash
 …/sample-1 main 47s ❯ oha -n20000 -c100 'http://localhost:9999/ranking-accelerated'
 Summary:
-  Success rate: 100.00%
-  Total:        22.3230 secs
-  Slowest:      0.2257 secs
-  Fastest:      0.0058 secs
-  Average:      0.1115 secs
-  Requests/sec: 895.9356
+  Success rate:	100.00%
+  Total:	3.5200 secs
+  Slowest:	0.0783 secs
+  Fastest:	0.0010 secs
+  Average:	0.0176 secs
+  Requests/sec:	5681.8874
 
-  Total data:   2.71 MiB
-  Size/request: 14
-  Size/sec:     124.24 KiB
+  Total data:	2.71 MiB
+  Size/request:	14
+  Size/sec:	787.79 KiB
 
 Response time histogram:
-  0.006 [1]    |
-  0.028 [146]  |■
-  0.050 [744]  |■■■■■
-  0.072 [2089] |■■■■■■■■■■■■■■■
-  0.094 [3462] |■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.116 [4356] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.138 [4175] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.160 [3134] |■■■■■■■■■■■■■■■■■■■■■■■
-  0.182 [1467] |■■■■■■■■■■
-  0.204 [384]  |■■
-  0.226 [42]   |
+  0.001 [1]    |
+  0.009 [1598] |■■■■■
+  0.016 [7334] |■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.024 [8796] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.032 [1783] |■■■■■■
+  0.040 [169]  |
+  0.047 [71]   |
+  0.055 [96]   |
+  0.063 [61]   |
+  0.071 [43]   |
+  0.078 [48]   |
 
 Response time distribution:
-  10.00% in 0.0634 secs
-  25.00% in 0.0854 secs
-  50.00% in 0.1122 secs
-  75.00% in 0.1379 secs
-  90.00% in 0.1588 secs
-  95.00% in 0.1701 secs
-  99.00% in 0.1912 secs
-  99.90% in 0.2083 secs
-  99.99% in 0.2235 secs
+  10.00% in 0.0093 secs
+  25.00% in 0.0130 secs
+  50.00% in 0.0172 secs
+  75.00% in 0.0210 secs
+  90.00% in 0.0246 secs
+  95.00% in 0.0272 secs
+  99.00% in 0.0504 secs
+  99.90% in 0.0747 secs
+  99.99% in 0.0782 secs
 
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0027 secs, 0.0012 secs, 0.0032 secs
-  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0002 secs
+  DNS+dialup:	0.0039 secs, 0.0024 secs, 0.0105 secs
+  DNS-lookup:	0.0000 secs, 0.0000 secs, 0.0005 secs
 
 Status code distribution:
   [200] 20000 responses
@@ -148,45 +147,45 @@ Status code distribution:
 ```bash
 …/sample-1 main ❯ oha -n20000 -c100 'http://localhost:9999/ranking-materialized'
 Summary:
-  Success rate: 100.00%
-  Total:        4.4439 secs
-  Slowest:      0.0628 secs
-  Fastest:      0.0010 secs
-  Average:      0.0222 secs
-  Requests/sec: 4500.5780
+  Success rate:	100.00%
+  Total:	2.6181 secs
+  Slowest:	0.0707 secs
+  Fastest:	0.0006 secs
+  Average:	0.0131 secs
+  Requests/sec:	7639.1770
 
-  Total data:   2.71 MiB
-  Size/request: 14
-  Size/sec:     624.10 KiB
+  Total data:	2.71 MiB
+  Size/request:	14
+  Size/sec:	1.03 MiB
 
 Response time histogram:
   0.001 [1]    |
-  0.007 [65]   |
-  0.013 [953]  |■■■
-  0.020 [6626] |■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.026 [7627] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-  0.032 [3117] |■■■■■■■■■■■■■
-  0.038 [1126] |■■■■
-  0.044 [358]  |■
-  0.050 [99]   |
-  0.057 [17]   |
-  0.063 [11]   |
+  0.008 [2800] |■■■■■■■■■
+  0.015 [9890] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.022 [6695] |■■■■■■■■■■■■■■■■■■■■■
+  0.029 [494]  |■
+  0.036 [20]   |
+  0.043 [9]    |
+  0.050 [15]   |
+  0.057 [38]   |
+  0.064 [15]   |
+  0.071 [23]   |
 
 Response time distribution:
-  10.00% in 0.0153 secs
-  25.00% in 0.0178 secs
-  50.00% in 0.0212 secs
-  75.00% in 0.0254 secs
-  90.00% in 0.0307 secs
-  95.00% in 0.0346 secs
-  99.00% in 0.0421 secs
-  99.90% in 0.0533 secs
-  99.99% in 0.0623 secs
+  10.00% in 0.0068 secs
+  25.00% in 0.0096 secs
+  50.00% in 0.0130 secs
+  75.00% in 0.0161 secs
+  90.00% in 0.0186 secs
+  95.00% in 0.0204 secs
+  99.00% in 0.0245 secs
+  99.90% in 0.0642 secs
+  99.99% in 0.0670 secs
 
 
 Details (average, fastest, slowest):
-  DNS+dialup:   0.0027 secs, 0.0013 secs, 0.0033 secs
-  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0001 secs
+  DNS+dialup:	0.0039 secs, 0.0028 secs, 0.0042 secs
+  DNS-lookup:	0.0001 secs, 0.0000 secs, 0.0006 secs
 
 Status code distribution:
   [200] 20000 responses
