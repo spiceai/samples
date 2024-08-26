@@ -21,7 +21,8 @@ First a CA (Certificate Authority) will be created with OpenSSL. Then, certifica
 The rest of the commands in this tutorial should be run from the `tls` directory.
 
 ```bash
-cd tls
+git clone https://github.com/spiceai/samples.git
+cd samples/tls
 ```
 
 ## Create a CA (Certificate Authority)
@@ -126,7 +127,6 @@ curl --cacert ca.pem https://localhost:8090/health
 The sample Go application connects securely to the `spiced` service over TLS and does a simple query using the `flightsql` ADBC driver.
 
 ```bash
-cd tls # If not already in the tls directory
 go run main.go
 ```
 
