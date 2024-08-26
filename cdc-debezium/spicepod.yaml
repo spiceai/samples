@@ -1,16 +1,15 @@
 version: v1beta1
 kind: Spicepod
 name: cdc-debezium
-
 datasets:
-- from: debezium:cdc.public.customer_addresses
-  name: cdc
-  params:
-    debezium_transport: kafka
-    debezium_message_format: json
-    kafka_bootstrap_servers: localhost:19092
-  acceleration:
-    enabled: true
-    engine: duckdb
-    mode: file
-    refresh_mode: changes
+  - from: debezium:cdc.public.customer_addresses
+    name: cdc
+    params:
+      debezium_transport: kafka
+      debezium_message_format: json
+      kafka_bootstrap_servers: localhost:19092
+    acceleration:
+      enabled: true
+      engine: sqlite
+      mode: file
+      refresh_mode: changes
