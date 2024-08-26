@@ -49,12 +49,18 @@ datasets:
       kafka_bootstrap_servers: localhost:19092
     acceleration:
       enabled: true
-      engine: duckdb
+      engine: sqlite
       mode: file
       refresh_mode: changes
 ```
 
-Start the Spice runtime, ensuring you are in the `cdc-debezium` directory:
+Spice runtime is already configured to run with the debug level of information, with environment variable configured in `cdc-debezium/.env`
+
+```
+SPICED_LOG="spiced=DEBUG,runtime=DEBUG,data_components=DEBUG,cache=DEBUG"
+```
+
+Ensure the current directory is `cdc-debezium`, and start the spice runtime with the following command
 
 ```bash
 spice run
@@ -89,7 +95,13 @@ VALUES
 (100, 'John', 'Doe', 'john@doe.com');
 ```
 
-Notice that the Spice log shows the change. Querying the data again from the `spice sql` REPL will show the new record.
+Notice that the Spice log shows the change.
+
+```
+2024-08-26T22:29:48.540739Z DEBUG runtime::accelerated_table::refresh_task::changes: Upserting data row for cdc with id=100
+```
+
+Querying the data again from the `spice sql` REPL will show the new record.
 
 ```sql
 SELECT * FROM cdc;
@@ -98,7 +110,7 @@ SELECT * FROM cdc;
 Now let's see what happens when we stop Spice and restart it. The data should still be there and it should not replay all of the changes from the beginning.
 
 ```
-2024-07-29T23:21:47.934358Z  INFO runtime::accelerated_table::refresh_task::changes: Upserting data row for cdc with id=100
+2024-08-26T22:30:16.715586Z  INFO runtime: Dataset cdc registered (debezium:cdc.public.customer_addresses), acceleration (sqlite:file, changes), results cache enabled.
 ```
 
 Stop spice with `Ctrl+C`
