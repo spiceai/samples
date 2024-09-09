@@ -9,6 +9,8 @@ spice run
 ## Install dependencies
 
 ```shell
+python -m venv .venv
+source .venv/bin/activate
 pip install git+https://github.com/spiceai/spicepy@v2.0.0
 ```
 
