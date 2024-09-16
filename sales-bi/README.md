@@ -99,13 +99,16 @@ Welcome to the interactive Spice.ai SQL Query Utility! Type 'help' for help.
 
 show tables; -- list available tables
 sql> show tables
-+---------------+--------------------+--------------------+------------+
-| table_catalog | table_schema       | table_name         | table_type |
-+---------------+--------------------+--------------------+------------+
-| spice         | public             | cleaned_sales_data | BASE TABLE |
-+---------------+--------------------+--------------------+------------+
++---------------+--------------+--------------------------------+------------+
+| table_catalog | table_schema | table_name                     | table_type |
++---------------+--------------+--------------------------------+------------+
+| spice         | runtime      | task_history                   | BASE TABLE |
+| spice         | public       | cleaned_sales_data             | BASE TABLE |
+| spice         | public       | cleaned_sales_data_accelerated | BASE TABLE |
++---------------+--------------+--------------------------------+------------+
 
-Query took: 0.008933628 seconds
+Time: 0.01025875 seconds. 3 rows.
+
 sql> select * from cleaned_sales_data limit 1;
 sql> select order_date, sales from cleaned_sales_data limit 3;
 +---------------------+---------+
@@ -116,7 +119,7 @@ sql> select order_date, sales from cleaned_sales_data limit 3;
 | 2003-07-01T00:00:00 | 3884.34 |
 +---------------------+---------+
 
-Query took: 0.012897393 seconds
+Time: 0.610236 seconds. 3 rows.
 ```
 
 ## Clean up
