@@ -109,7 +109,6 @@ sql> show tables
 
 Time: 0.01025875 seconds. 3 rows.
 
-Query took: 0.008933628 seconds
 sql> select * from cleaned_sales_data limit 1;
 sql> select order_date, sales from cleaned_sales_data limit 3;
 +---------------------+---------+
