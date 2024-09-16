@@ -7,6 +7,7 @@ clean:
 	@docker compose down
 	@docker volume prune -f
 	@docker image prune -f
+	rm -r .spice
 
 .PHONY: register-connector
 register-connector:
