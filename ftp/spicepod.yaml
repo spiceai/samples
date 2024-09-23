@@ -8,6 +8,7 @@ datasets:
       file_format: csv
       ftp_user: user
       ftp_pass: 123
+      ftp_port: 20021
     acceleration:
       enabled: true
       refresh_mode: full
