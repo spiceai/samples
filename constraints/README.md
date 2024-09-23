@@ -39,12 +39,13 @@ Welcome to the interactive Spice.ai SQL Query Utility! Type 'help' for help.
 
 show tables; -- list available tables
 sql> show tables
-+---------------+--------------+---------------+------------+
-| table_catalog | table_schema | table_name    | table_type |
-+---------------+--------------+---------------+------------+
-| spice         | public       | users         | BASE TABLE |
-| spice         | runtime      | query_history | BASE TABLE |
-+---------------+--------------+---------------+------------+
++---------------+--------------+--------------+------------+
+| table_catalog | table_schema | table_name   | table_type |
++---------------+--------------+--------------+------------+
+| spice         | public       | users        | BASE TABLE |
+| spice         | runtime      | task_history | BASE TABLE |
+| spice         | runtime      | metrics      | BASE TABLE |
++---------------+--------------+--------------+------------+
 
 Time: 0.031901631 seconds. 2 rows.
 sql> select email, username, items_bought, last_login from users;
