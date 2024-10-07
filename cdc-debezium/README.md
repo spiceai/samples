@@ -139,6 +139,4 @@ If you don't have the `make` command available, you can run the following comman
 
 ```bash
 docker compose down
-docker volume prune -f
-docker image prune -f
 ```
