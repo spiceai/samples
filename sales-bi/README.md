@@ -98,7 +98,7 @@ In addition to Apache Superset, run queries using the Spice SQL REPL to explore 
 Welcome to the interactive Spice.ai SQL Query Utility! Type 'help' for help.
 
 show tables; -- list available tables
-sql> show tables
+sql> show tables;
 +---------------+--------------+--------------------------------+------------+
 | table_catalog | table_schema | table_name                     | table_type |
 +---------------+--------------+--------------------------------+------------+
