@@ -9,14 +9,14 @@ load_dotenv()
 #logging.basicConfig(level=logging.DEBUG)
 
 # Replace the base_url with your local instance of the Spice HTTP API
-client = Client(api_key=os.getenv("SPICE_OPENAI_API_KEY"), base_url="http://localhost:8090/v1")
+client = Client(api_key="anything", base_url="http://localhost:8090/v1")
 
 # Use the OpenAI SDK as you normally would
 chat_completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": "Say this is a test",
+            "content": "What datasets do I have access to?",
         }
     ],
     model="openai",
