@@ -1,0 +1,17 @@
+version: v1beta1
+kind: Spicepod
+name: cross_cloud
+
+datasets:
+    - from: s3://spiceai-public-datasets/nyc_taxi_2014/
+      name: s3_taxi
+      description: taxi trips in s3
+      params:
+        file_format: parquet
+    - from: abfs://data/nyc_taxi_2015/
+      name: abfs_taxi
+      description: taxi trips in abfs
+      params:
+        file_format: parquet
+        abfs_account: spiceaidemodatasets
+        abfs_skip_signature: true
