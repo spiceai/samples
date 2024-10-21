@@ -72,6 +72,8 @@ Follow steps 1-3 from the previous section.
     SELECT to_timestamp(tpep_dropoff_datetime), fare_amount FROM public.taxi_trips LIMIT 100
     ```
 
+   Add the header `Accept: application/json` as well.
+
 ![screenshot](./img/grafana-datasource-9.png)
 
 ## Clean up
