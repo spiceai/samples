@@ -27,6 +27,7 @@ cd samples/constraints
 then observe the logs of the Spice runtime and the worker service.
 
 `docker logs -f spiceai-constraint-demo`
+
 `docker logs -f spiceai-constraint-demo-worker`
 
 ## Spice SQL REPL
@@ -44,7 +45,6 @@ sql> show tables;
 +---------------+--------------+--------------+------------+
 | spice         | public       | users        | BASE TABLE |
 | spice         | runtime      | task_history | BASE TABLE |
-| spice         | runtime      | metrics      | BASE TABLE |
 +---------------+--------------+--------------+------------+
 
 Time: 0.031901631 seconds. 2 rows.
