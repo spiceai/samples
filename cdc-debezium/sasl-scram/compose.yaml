@@ -126,9 +126,9 @@ services:
   kafka:
     image: bitnami/kafka:latest
     environment:
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:29092,SASL_SSL://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,SASL_SSL://kafka:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,SASL_SSL:SASL_SSL
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:29092,INTERNAL_SASL_SSL://:9092,EXTERNAL_SASL_SSL://:19092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,INTERNAL_SASL_SSL://kafka:9092,EXTERNAL_SASL_SSL://localhost:19092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,INTERNAL_SASL_SSL:SASL_SSL,EXTERNAL_SASL_SSL:SASL_SSL
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       
@@ -152,6 +152,7 @@ services:
       # JAAS configuration
       - KAFKA_CFG_SASL_JAAS_CONFIG=org.apache.kafka.common.security.scram.ScramLoginModule required username="kafka" password="kafka_password";
     ports:
+      - "19092:19092"
       - "9092:9092"
       - "29092:29092"
     volumes:

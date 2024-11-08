@@ -4,9 +4,7 @@ all:
 
 .PHONY: clean
 clean:
-	@docker compose down
-	@docker volume prune -f
-	@docker image prune -f
+	@docker compose down -v
 	rm -r .spice
 
 .PHONY: register-connector

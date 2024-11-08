@@ -1,8 +1,6 @@
-# Streaming changes in real-time with Debezium CDC
+# Streaming changes in real-time with Debezium CDC and SASL/SCRAM authentication
 
-Change Data Capture (CDC) is a technique to capture changed rows from a database's transaction log and deliver to consumers with low latency. Leveraging this technique allows Spice to keep locally accelerated datasets up-to-date in real-time with the source data, and is highly efficient by only transferring the changed rows instead of re-fetching the entire dataset on refresh.
-
-In this sample we will have a local Postgres database with a table `customer_addresses` and a Spice runtime that accelerates the data from the `customer_addresses` table. A Debezium connector will capture changes from the `customer_addresses` table and publish them to a Kafka topic called `cdc.public.customer_addresses`. The Spice runtime will consume the changes from the Kafka topic and keep an accelerated dataset updated with the changes, including the initial state.
+This sample is identical to the [cdc-debezium](../README.md) sample, but using SASL/SCRAM over TLS authentication for Kafka instead of PLAINTEXT.
 
 ## Pre-requisites
 
@@ -16,29 +14,33 @@ You will also need `psql` or another Database client (i.e. DBeaver) to connect t
 
 ## How to run
 
-Clone this samples repo locally and navigate to the `cdc-debezium` directory:
+Clone this samples repo locally and navigate to the `cdc-debezium/sasl-scram` directory:
 
 ```bash
 git clone https://github.com/spiceai/samples.git
-cd samples/cdc-debezium
+cd samples/cdc-debezium/sasl-scram
 ```
 
-Start the Docker Compose stack, which includes a Postgres database, a Kafka broker (via Redpanda), and a Debezium connector:
+Start the Docker Compose stack, which includes a Postgres database, a Kafka broker, Zookeeper, and a Debezium connector:
 
 `docker compose up -d`
 
-Navigate to http://localhost:8080 to see the Redpanda console. Notice that no topics are created by Debezium yet. We need to tell Debezium to connect to the Postgres database and create the topics.
+Register the Debezium connector:
 
-`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-connector.json`
+`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @../register-connector.json`
 
-Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the Postgres database. Open http://localhost:8080/topics and see the topic `cdc.public.customer_addresses` created.
+or using `make`:
 
-This spicepod.yaml shows the config needed to configure Spice to connect to the Kafka topic and consume the Debezium changes:
+`make register-connector`
+
+Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the Postgres database.
+
+This spicepod.yaml shows the config needed to configure Spice to connect to the Kafka topic and consume the Debezium changes with SASL/SCRAM authentication over TLS:
 
 ```yaml
 version: v1beta1
 kind: Spicepod
-name: cdc-debezium
+name: cdc-debezium-sasl-scram
 
 datasets:
   - from: debezium:cdc.public.customer_addresses
@@ -47,6 +49,12 @@ datasets:
       debezium_transport: kafka
       debezium_message_format: json
       kafka_bootstrap_servers: localhost:19092
+      kafka_security_protocol: SASL_SSL
+      kafka_sasl_mechanism: SCRAM-SHA-512
+      kafka_sasl_username: kafka
+      kafka_sasl_password: kafka_password
+      kafka_ssl_ca_location: ./certs/kafka_ca_cert.pem
+      kafka_enable_ssl_certificate_verification: true
     acceleration:
       enabled: true
       engine: sqlite
@@ -54,13 +62,13 @@ datasets:
       refresh_mode: changes
 ```
 
-Spice runtime is already configured to run with the debug level of information, with environment variable configured in `cdc-debezium/.env`
+Spice runtime is already configured to run with the debug level of information, with environment variable configured in `cdc-debezium/sasl-scram/.env`
 
 ```
 SPICED_LOG="spiced=DEBUG,runtime=DEBUG,data_components=DEBUG,cache=DEBUG"
 ```
 
-Ensure the current directory is `cdc-debezium`, and start the spice runtime with the following command
+Ensure the current directory is `cdc-debezium/sasl-scram`, and start the spice runtime with the following command
 
 ```bash
 spice run
@@ -139,4 +147,6 @@ If you don't have the `make` command available, you can run the following comman
 
 ```bash
 docker compose down -v
+rm -r .spice || true
+rm -r certs || true
 ```
