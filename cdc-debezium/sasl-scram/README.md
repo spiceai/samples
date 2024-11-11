@@ -27,6 +27,8 @@ Start the Docker Compose stack, which includes a MySQL database, a Kafka broker,
 docker compose up -d
 ```
 
+Navigate to <http://localhost:8080> to see the Kafka console. Notice that no topics are created by Debezium yet. We need to tell Debezium to connect to the MySQL database and create the topics.
+
 Register the Debezium connector:
 
 ```bash
