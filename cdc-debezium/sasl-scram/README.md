@@ -23,19 +23,25 @@ cd samples/cdc-debezium/sasl-scram
 
 Start the Docker Compose stack, which includes a Postgres database, a Kafka broker, Zookeeper, and a Debezium connector:
 
-`docker compose up -d`
+```bash
+docker compose up -d
+```
 
 Register the Debezium connector:
 
-`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @../register-connector.json`
+```bash
+curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @../register-connector.json
+```
 
 or using `make`:
 
-`make register-connector`
+```bash
+make register-connector
+```
 
 Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the Postgres database.
 
-This spicepod.yaml shows the config needed to configure Spice to connect to the Kafka topic and consume the Debezium changes with SASL/SCRAM authentication over TLS:
+This `spicepod.yaml` shows the config needed to configure Spice to connect to the Kafka topic and consume the Debezium changes with SASL/SCRAM authentication over TLS:
 
 ```yaml
 version: v1beta1
