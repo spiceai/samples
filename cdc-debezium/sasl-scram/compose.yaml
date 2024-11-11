@@ -164,26 +164,6 @@ services:
       tls-init:
         condition: service_completed_successfully
 
-  kafka-tools:
-    image: bitnami/kafka:latest
-    volumes:
-      - ./certs:/opt/bitnami/kafka/config/certs
-    environment:
-      # These env vars help avoid warnings in the kafka scripts
-      - KAFKA_CFG_LISTENERS=
-      - KAFKA_CFG_ADVERTISED_LISTENERS=
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        cat > /opt/bitnami/kafka/config/client.properties << EOF
-        security.protocol=SASL_SSL
-        sasl.mechanism=SCRAM-SHA-512
-        ssl.truststore.location=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
-        ssl.truststore.password=truststore_password
-        sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="kafka" password="kafka_password";
-        EOF
-
-        sleep infinity
   debezium:
     image: debezium/connect:2.7
     container_name: debezium
@@ -257,6 +237,20 @@ services:
         reservations:
           cpus: '2'
           memory: 2G
+  kafka-console:
+    container_name: kafka-console
+    image: docker.redpanda.com/redpandadata/console:v2.6.0
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:29092"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
 
 volumes:
   zookeeper_data:
