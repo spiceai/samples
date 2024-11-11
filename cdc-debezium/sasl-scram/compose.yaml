@@ -164,26 +164,6 @@ services:
       tls-init:
         condition: service_completed_successfully
 
-  kafka-tools:
-    image: bitnami/kafka:latest
-    volumes:
-      - ./certs:/opt/bitnami/kafka/config/certs
-    environment:
-      # These env vars help avoid warnings in the kafka scripts
-      - KAFKA_CFG_LISTENERS=
-      - KAFKA_CFG_ADVERTISED_LISTENERS=
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        cat > /opt/bitnami/kafka/config/client.properties << EOF
-        security.protocol=SASL_SSL
-        sasl.mechanism=SCRAM-SHA-512
-        ssl.truststore.location=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
-        ssl.truststore.password=truststore_password
-        sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="kafka" password="kafka_password";
-        EOF
-
-        sleep infinity
   debezium:
     image: debezium/connect:2.7
     container_name: debezium
@@ -223,20 +203,32 @@ services:
       - 8083:8083
     volumes:
       - ./certs:/kafka/certs
-  postgres:
-    image: "postgres:alpine"
+  mysql:
+    image: mysql:8.0
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    expose:
-      - "5432"
+      - MYSQL_ROOT_PASSWORD=debezium
+      - MYSQL_USER=mysqluser
+      - MYSQL_PASSWORD=mysqlpw
+      - MYSQL_DATABASE=inventory
     ports:
-      - 15432:5432
+      - "3306:3306"
     volumes:
-      - ../init:/docker-entrypoint-initdb.d
-      - ../pg_config.conf:/etc/postgresql/postgresql.conf
-    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]  
+      - ../init:/docker-entrypoint-initdb.d  # For initialization scripts
+      - mysql_data:/var/lib/mysql
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-authentication-plugin=mysql_native_password',
+      '--log-bin=mysql-bin',
+      '--binlog-format=ROW',
+      '--server-id=1',
+      '--binlog-rows-query-log-events=ON'
+    ]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     deploy:
       resources:
         limits:
@@ -245,11 +237,22 @@ services:
         reservations:
           cpus: '2'
           memory: 2G
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres -h localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  kafka-console:
+    container_name: kafka-console
+    image: docker.redpanda.com/redpandadata/console:v2.6.0
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:29092"]
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
+
 volumes:
   zookeeper_data:
   kafka_data:
+  mysql_data:
