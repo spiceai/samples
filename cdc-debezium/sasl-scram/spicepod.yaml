@@ -2,7 +2,7 @@ version: v1beta1
 kind: Spicepod
 name: cdc-debezium
 datasets:
-  - from: debezium:cdc.public.customer_addresses
+  - from: debezium:cdc.inventory.customer_addresses
     name: cdc
     params:
       debezium_transport: kafka

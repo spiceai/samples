@@ -8,9 +8,9 @@ This sample requires [Docker](https://www.docker.com/) and [Docker Compose](http
 
 Also ensure that you have the `spice` CLI installed. You can find instructions on how to install it [here](https://docs.spiceai.org/getting-started).
 
-You will also need `psql` or another Database client (i.e. DBeaver) to connect to the Postgres database.
+You will also need `mysql` or another Database client (i.e. DBeaver) to connect to the MySQL database.
 
-`curl` is required to register the Debezium Postgres connector.
+`curl` is required to register the Debezium MySQL connector.
 
 ## How to run
 
@@ -21,19 +21,19 @@ git clone https://github.com/spiceai/samples.git
 cd samples/cdc-debezium/sasl-scram
 ```
 
-Start the Docker Compose stack, which includes a Postgres database, a Kafka broker, Zookeeper, and a Debezium connector:
+Start the Docker Compose stack, which includes a MySQL database, a Kafka broker, Zookeeper, and a Debezium connector:
 
 `docker compose up -d`
 
 Register the Debezium connector:
 
-`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @../register-connector.json`
+`curl -i -X POST -H "Accept:application/json" -H  "Content-Type:application/json" http://localhost:8083/connectors/ -d @register-connector.json`
 
 or using `make`:
 
 `make register-connector`
 
-Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the Postgres database.
+Now the Debezium connector is registered and will start capturing changes from the `customer_addresses` table in the MySQL database.
 
 This spicepod.yaml shows the config needed to configure Spice to connect to the Kafka topic and consume the Debezium changes with SASL/SCRAM authentication over TLS:
 
@@ -89,12 +89,12 @@ Run `spice sql` in a separate terminal to query the data
 SELECT * FROM cdc;
 ```
 
-Now let's make some changes to the Postgres database and observe that Spice consumes the changes.
+Now let's make some changes to the MySQL database and observe that Spice consumes the changes.
 
-Stop the Spice SQL REPL or open a third terminal and connect to the Postgres database with `psql`:
+Stop the Spice SQL REPL or open a third terminal and connect to the MySQL database with `mysql`:
 
 ```bash
-PGPASSWORD="postgres" psql -h localhost -U postgres -d postgres -p 15432
+mysql -h localhost -u root -p debezium -P 3306
 ```
 
 ```sql
