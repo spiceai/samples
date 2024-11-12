@@ -5,7 +5,8 @@ all:
 .PHONY: clean
 clean:
 	@docker compose down -v
-	rm -r .spice
+	rm -r .spice || true
+	rm -r certs || true
 
 .PHONY: register-connector
 register-connector:
