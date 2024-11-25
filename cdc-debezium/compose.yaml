@@ -84,7 +84,7 @@ services:
     depends_on:
       - redpanda-kafka-0
   debezium:
-    image: debezium/connect:2.7
+    image: debezium/connect:2.7.3.Final
     container_name: debezium
     environment:
       BOOTSTRAP_SERVERS: redpanda-kafka-0:9092
