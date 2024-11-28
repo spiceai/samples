@@ -1,4 +1,4 @@
-FROM apache/superset
+FROM apache/superset:4.0.2
 # Switching to root to install the required packages
 USER root
 # https://github.com/influxdata/flightsql-dbapi
