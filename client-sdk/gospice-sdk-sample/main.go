@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/apache/arrow/go/v16/arrow/array"
-	"github.com/spiceai/gospice/v6"
+	"github.com/apache/arrow/go/v17/arrow/array"
+	"github.com/spiceai/gospice/v7"
 )
 
 func main() {
