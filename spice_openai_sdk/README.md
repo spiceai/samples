@@ -7,42 +7,48 @@ One of Spice's best features is to act in place of the OpenAI API. Even better, 
 1. Python >= 3.10
 2. Python package manager (`pip` or `uv`)
 3. Spice [installed](https://docs.spiceai.org/getting-started)
-3. OpenAI API Key
-4. A clone of this repository on your local machine
+4. OpenAI API Key
+5. A clone of this repository on your local machine
 
 ## Starting Spice
 
 The first step is to get the Spice instance up and running.
 
-1. Copy `.env` to a new filed called `.env.local`
-2. Replace `SPICE_OPENAI_API_KEY` in `.env.local` with your OpenAI API key
-3. Start Spice with `spice run`
+```bash
+cd spice_openai_sdk
+# Add your OpenAI API key to the .env.local file
+echo "SPICE_OPENAI_API_KEY=your_openai_api_key" > .env.local
+# Start Spice
+spice run
+```
 
 Spice will use your OpenAI API key to communicate with OpenAI on your client code's behalf.
 
 ## Client prerequisites
 
-These steps only need to be done once. It's highly suggested to use a Python `virutalenv` to keep your projects isolated from each other.
+These steps only need to be done once. Use a Python `virtualenv` to keep projects isolated.
 
 ### Using pip
 
-1. (Optional) Activate your virtual environment (`source .venv/bin/activate`)
-2. Install the required packages: `pip install -r requirements.txt`
+1. Create the virtual environment: `python -m venv .venv`
+2. Activate the virtual environment: `source .venv/bin/activate`
+3. Install the required packages: `pip install -r requirements.txt`
 
-To run the client, simply use `python spice_openai_sdk.py`
+Run the client: `python spice_openai_sdk.py`
 
 ### Using uv
 
 1. Use `uv venv` to create the virtual environment
-2. Ensure the packages are installed: `uv sync`
+2. Activate the virtual environment: `source .venv/bin/activate`
+3. Ensure the packages are installed: `uv sync`
 
-To run the client, simply use `uv run spice_openai_sdk.py`
+Run the client: `uv run spice_openai_sdk.py`
 
 ## About the client
 
-The client is fairly simple, but it demonstrates how you can integrate existing tooling with Spice's AI Gateway.
+The client is fairly simple, but it demonstrates how to integrate existing tooling with Spice's AI Gateway.
 
-First, we construct the client:
+First, construct the client:
 
 ```python
 client = Client(api_key="anything", base_url="http://localhost:8090/v1")
