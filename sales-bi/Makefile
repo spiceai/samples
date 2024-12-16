@@ -20,6 +20,5 @@ start:
 
 .PHONY: clean
 clean:
-	@docker compose down
-	@docker volume prune -f
-	@docker image prune -f
+	@docker compose down --volumes --rmi local
+	@echo "Cleaned up project containers, volumes, and locally built images"

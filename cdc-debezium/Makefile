@@ -4,7 +4,8 @@ all:
 
 .PHONY: clean
 clean:
-	@docker compose down -v
+	@docker compose down --volumes --rmi local
+	@echo "Cleaned up project containers, volumes, and locally built images"
 	rm -r .spice
 
 .PHONY: register-connector
